@@ -42,6 +42,94 @@ CREATE TABLE `cache_locks` (
 
 /*Data for the table `cache_locks` */
 
+/*Table structure for table `categories` */
+
+DROP TABLE IF EXISTS `categories`;
+
+CREATE TABLE `categories` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `slug` varchar(255) NOT NULL,
+  `description` text DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `meta_title` varchar(255) DEFAULT NULL,
+  `meta_description` text DEFAULT NULL,
+  `meta_keywords` text DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `categories_slug_unique` (`slug`),
+  KEY `categories_status_index` (`status`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+/*Data for the table `categories` */
+
+insert  into `categories`(`id`,`name`,`slug`,`description`,`image`,`status`,`meta_title`,`meta_description`,`meta_keywords`,`created_at`,`updated_at`,`deleted_at`) values 
+(1,'Technology','technology',NULL,NULL,1,NULL,NULL,NULL,'2026-08-30 16:46:20','2026-08-30 16:46:20',NULL);
+
+/*Table structure for table `content_tag` */
+
+DROP TABLE IF EXISTS `content_tag`;
+
+CREATE TABLE `content_tag` (
+  `id` int(20) NOT NULL AUTO_INCREMENT,
+  `content_id` int(20) DEFAULT NULL,
+  `tag_id` int(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+/*Data for the table `content_tag` */
+
+insert  into `content_tag`(`id`,`content_id`,`tag_id`) values 
+(1,1,1);
+
+/*Table structure for table `contents` */
+
+DROP TABLE IF EXISTS `contents`;
+
+CREATE TABLE `contents` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `category_id` bigint(20) unsigned NOT NULL,
+  `author_id` bigint(20) unsigned NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `slug` varchar(255) NOT NULL,
+  `excerpt` text DEFAULT NULL,
+  `content` longtext NOT NULL,
+  `featured_image` varchar(255) DEFAULT NULL,
+  `featured_image_alt` varchar(255) DEFAULT NULL,
+  `featured_image_caption` varchar(255) DEFAULT NULL,
+  `content_type` varchar(50) NOT NULL DEFAULT 'article',
+  `status` varchar(50) NOT NULL DEFAULT 'draft',
+  `published_at` timestamp NULL DEFAULT NULL,
+  `reading_time` int(10) unsigned NOT NULL DEFAULT 0,
+  `views` bigint(20) unsigned NOT NULL DEFAULT 0,
+  `is_featured` tinyint(1) NOT NULL DEFAULT 0,
+  `allow_comments` tinyint(1) NOT NULL DEFAULT 1,
+  `quote_author` varchar(255) DEFAULT NULL,
+  `quote_author_description` text DEFAULT NULL,
+  `quote_source` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `contents_slug_unique` (`slug`),
+  KEY `contents_category_id_index` (`category_id`),
+  KEY `contents_author_id_index` (`author_id`),
+  KEY `contents_content_type_index` (`content_type`),
+  KEY `contents_status_index` (`status`),
+  KEY `contents_published_at_index` (`published_at`),
+  KEY `contents_is_featured_index` (`is_featured`),
+  CONSTRAINT `contents_author_id_foreign` FOREIGN KEY (`author_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `contents_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+/*Data for the table `contents` */
+
+insert  into `contents`(`id`,`category_id`,`author_id`,`title`,`slug`,`excerpt`,`content`,`featured_image`,`featured_image_alt`,`featured_image_caption`,`content_type`,`status`,`published_at`,`reading_time`,`views`,`is_featured`,`allow_comments`,`quote_author`,`quote_author_description`,`quote_source`,`created_at`,`updated_at`,`deleted_at`) values 
+(1,1,2,'Laravel 12 Tutorial','laravel-12-tutorial','A Laravel 12 tutorial.','Sample content.',NULL,NULL,NULL,'article','published','2026-08-30 16:47:14',5,0,0,1,NULL,NULL,NULL,'2026-08-30 16:47:14','2026-08-30 16:47:14',NULL);
+
 /*Table structure for table `failed_jobs` */
 
 DROP TABLE IF EXISTS `failed_jobs`;
@@ -219,6 +307,35 @@ insert  into `roles`(`id`,`name`,`description`,`created_at`,`updated_at`) values
 (1,'admin',NULL,'2024-03-11 07:41:11','2024-03-11 07:41:11'),
 (3,'employee',NULL,'2024-05-10 15:46:24','2024-03-11 07:47:02');
 
+/*Table structure for table `seo_meta` */
+
+DROP TABLE IF EXISTS `seo_meta`;
+
+CREATE TABLE `seo_meta` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `seoable_id` bigint(20) unsigned NOT NULL,
+  `seoable_type` varchar(255) NOT NULL,
+  `meta_title` varchar(255) DEFAULT NULL,
+  `meta_description` text DEFAULT NULL,
+  `meta_keywords` text DEFAULT NULL,
+  `canonical_url` varchar(2048) DEFAULT NULL,
+  `og_title` varchar(255) DEFAULT NULL,
+  `og_description` text DEFAULT NULL,
+  `og_image` varchar(255) DEFAULT NULL,
+  `twitter_title` varchar(255) DEFAULT NULL,
+  `twitter_description` text DEFAULT NULL,
+  `twitter_image` varchar(255) DEFAULT NULL,
+  `robots` varchar(100) DEFAULT 'index, follow',
+  `schema_type` varchar(100) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `seo_meta_seoable_unique` (`seoable_id`,`seoable_type`),
+  KEY `seo_meta_seoable_index` (`seoable_type`,`seoable_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+/*Data for the table `seo_meta` */
+
 /*Table structure for table `sessions` */
 
 DROP TABLE IF EXISTS `sessions`;
@@ -247,6 +364,25 @@ insert  into `sessions`(`id`,`user_id`,`ip_address`,`user_agent`,`payload`,`last
 ('pwKY3HVqrWTvHns0GHrPrf71maHQ2CXW5qcjYf6c',1,'127.0.0.1','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36','YTo0OntzOjY6Il90b2tlbiI7czo0MDoibjNSV1I5YUEyUG9GNWVWbkxzMGZ1NG5pMzZVZjlGYUFRN09lZjlOViI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6MzU6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9jbXMvZGFzaGJvYXJkIjtzOjU6InJvdXRlIjtzOjEzOiJjbXMuZGFzaGJvYXJkIjt9czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MTt9',1788104761),
 ('rR0xJf5vpeK7daCCyhfxRHYfGePDHF2Ep65yeDzd',NULL,'127.0.0.1','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36','YTozOntzOjY6Il90b2tlbiI7czo0MDoic0ZseE9iZ2VRWUlxTnZzeTVwZFhnUTZKemN2S2g3UnIzUW5yQzFYSiI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6MzU6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9jbXMvZGFzaGJvYXJkIjtzOjU6InJvdXRlIjtzOjk6ImRhc2hib2FyZCI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=',1788098501),
 ('xZRwAPhXm7IiNE08n6BkxkafJhlwr1VQhYj5my9L',NULL,'127.0.0.1','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36','YTozOntzOjY6Il90b2tlbiI7czo0MDoiRllaWUZaWEpHZXNBMXduZldYR3Q5QVRjNTNEN0wzcjNvTUlIejloTiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6MzE6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9kYXNoYm9hcmQiO3M6NToicm91dGUiO3M6OToiZGFzaGJvYXJkIjt9fQ==',1788082319);
+
+/*Table structure for table `tags` */
+
+DROP TABLE IF EXISTS `tags`;
+
+CREATE TABLE `tags` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `slug` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `tags_slug_unique` (`slug`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+/*Data for the table `tags` */
+
+insert  into `tags`(`id`,`name`,`slug`,`created_at`,`updated_at`) values 
+(1,'Laravel','laravel','2026-08-30 16:48:49','2026-08-30 16:48:49');
 
 /*Table structure for table `users` */
 

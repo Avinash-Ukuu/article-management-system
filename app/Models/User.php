@@ -3,10 +3,12 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Content;
 use App\Models\Role;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -49,11 +51,11 @@ class User extends Authenticatable
         ];
     }
 
-     protected function name(): Attribute
+    protected function name(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => ucwords($value),
-            set: fn ($value) => strtolower($value),
+            get: fn($value) => ucwords($value),
+            set: fn($value) => strtolower($value),
         );
     }
 
@@ -66,13 +68,11 @@ class User extends Authenticatable
 
     public function showRoles()
     {
-        if($this->roles->isEmpty())
-        {
+        if ($this->roles->isEmpty()) {
             return "N/A";
         }
-        $roles  =   $this->roles->pluck("name","name")->toArray();
-        return implode(",",$roles);
-
+        $roles  =   $this->roles->pluck("name", "name")->toArray();
+        return implode(",", $roles);
     }
 
     // Policies check functions
@@ -80,9 +80,7 @@ class User extends Authenticatable
     {
         if ($this->super_admin) {
             return true;
-        }
-        else if(($this->roles->where("name","admin"))->isNotEmpty() ? $this->roles->where("name","admin")->first()->name == 'admin' : false)
-        {
+        } else if (($this->roles->where("name", "admin"))->isNotEmpty() ? $this->roles->where("name", "admin")->first()->name == 'admin' : false) {
             return true;
         }
         $roles = $this->roles->pluck('name')->toArray();
@@ -120,16 +118,14 @@ class User extends Authenticatable
 
     public function isVendor($user)
     {
-        if(empty($user->employee_id))
-        {
+        if (empty($user->employee_id)) {
             return false;
         }
         $employee   =   $user->load("employee")->employee;
-        if(empty($employee))
-        {
+        if (empty($employee)) {
             return false;
         }
-        return $employee->apply_for=="vendor";
+        return $employee->apply_for == "vendor";
     }
 
     private function permissions()
@@ -140,4 +136,8 @@ class User extends Authenticatable
         });
     }
 
+    public function contents(): HasMany
+    {
+        return $this->hasMany(Content::class, 'author_id');
+    }
 }
