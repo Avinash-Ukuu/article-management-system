@@ -1,0 +1,143 @@
+<?php
+
+namespace App\Http\Controllers\cms;
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\RoleRequest;
+use App\Models\Permission;
+use App\Models\Role;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Session;
+
+class RoleController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        Gate::authorize('userManager', new User());
+        $data['roles']  =   Role::all();
+
+        return view("cms.role.index", $data);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        Gate::authorize('userManager', new User());
+        $data['object']     =   new Role();
+        $data['url']        =   route("cms.role.store");
+        $data['method']     =   "POST";
+
+        return view("cms.role.form", $data);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(RoleRequest $request)
+    {
+        Gate::authorize('userManager', new User());
+        $role                   =   new Role();
+        $role->name             =   strtolower($request->name);
+        $role->description      =   $request->description;
+        $role->save();
+
+        Session::flash("success", "Role Created");
+        return redirect(route("cms.role.index"));
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        Gate::authorize('userManager', new User());
+        $data['object']     =   Role::find($id);
+        if (empty($data['object'])) {
+            Session::flash("error", "Role Already Deleted");
+            return back();
+        }
+        $data['url']        =   route("cms.role.update", ['role' => $id]);
+        $data['method']     =   "PUT";
+
+        return view("cms.role.form", $data);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(RoleRequest $request, string $id)
+    {
+        Gate::authorize('userManager', new User());
+        $role                   =   Role::find($id);
+        if (empty($role)) {
+            Session::flash("error", "Role Already Deleted");
+            return redirect(route("cms.role.index"));
+        }
+        $role->name             =   strtolower($request->name);
+        $role->description      =   $request->description;
+        $role->update();
+        Session::flash("success", "Role Updated");
+
+        return redirect(route("cms.role.index"));
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        Gate::authorize('userManager', new User());
+        $role                   =   Role::find($id);
+        if (empty($role)) {
+            Session::flash("error", "Role Already Deleted");
+            return back();
+        }
+        $role->permissions()->detach();
+        $role->delete();
+        Session::flash("success", "Role Deleted");
+
+        return redirect(route("cms.role.index"));
+    }
+
+    public function assignPermissionForm(Request $request)
+    {
+        Gate::authorize('userManager', new User());
+        $data['role']                   =   Role::with('permissions')->find($request->id);
+        if (empty($data['role'])) {
+            Session::flash("error", "Role Already Deleted");
+            return back();
+        }
+        $data['assignedPermissions']    =   $data['role']->permissions->isEmpty() ? [] : $data['role']->permissions->pluck("name", "id")->toArray();
+        $data['modulePermissions']      =   Permission::with("module")->get()->groupBy("module.name");
+        return view("cms.role.assignPermission", $data);
+    }
+
+    public function assignPermission(Request $request)
+    {
+        Gate::authorize('userManager', new User());
+        $role                   =   Role::find($request->id);
+        if (empty($role)) {
+            Session::flash("error", "Role Already Deleted");
+            return redirect(route("cms.role.index"));
+        }
+        $role->permissions()->sync($request->permission_id);
+       
+        Session::flash('success', 'Permissions Assigned Successfully');
+        return back();
+    }
+}
