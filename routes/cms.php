@@ -5,6 +5,7 @@ use App\Http\Controllers\cms\DashboardController;
 use App\Http\Controllers\cms\ModuleController;
 use App\Http\Controllers\cms\PermissionController;
 use App\Http\Controllers\cms\RoleController;
+use App\Http\Controllers\cms\TagController;
 use App\Http\Controllers\cms\UserController;
 use Illuminate\Support\Facades\Route;
 /*
@@ -36,5 +37,9 @@ Route::get("switch/user/form",              [UserController::class,'switchUserFo
 Route::post("switch/user",                  [UserController::class,'switchUser'])->name('switchUser');
 Route::get("logout/switch/user",            [UserController::class,'logoutSwitchUser'])->name('logoutSwitchUser');
 
+// Categories
 Route::resource('categories',               CategoryController::class);
 Route::patch('categories/{category}/toggle-status',    [CategoryController::class, 'toggleStatus'])->name('categories.toggle-status');
+
+// Tag
+Route::resource('tags',                     TagController::class);
