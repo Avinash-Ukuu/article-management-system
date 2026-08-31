@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\cms\CategoryController;
 use App\Http\Controllers\cms\DashboardController;
 use App\Http\Controllers\cms\ModuleController;
 use App\Http\Controllers\cms\PermissionController;
@@ -34,3 +35,6 @@ Route::post("/update/password",             [UserController::class,'updatePasswo
 Route::get("switch/user/form",              [UserController::class,'switchUserForm'])->name('switchUserForm');
 Route::post("switch/user",                  [UserController::class,'switchUser'])->name('switchUser');
 Route::get("logout/switch/user",            [UserController::class,'logoutSwitchUser'])->name('logoutSwitchUser');
+
+Route::resource('categories',               CategoryController::class);
+Route::patch('categories/{category}/toggle-status',    [CategoryController::class, 'toggleStatus'])->name('categories.toggle-status');
