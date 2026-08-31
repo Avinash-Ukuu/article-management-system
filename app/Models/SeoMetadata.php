@@ -4,15 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class SeoMeta extends Model
+class SeoMetadata extends Model
 {
     use HasFactory;
 
-    protected $table = 'seo_meta';
+    protected $table = 'seo_metadata';
 
     protected $fillable = [
+        'content_id',
         'meta_title',
         'meta_description',
         'meta_keywords',
@@ -24,11 +25,13 @@ class SeoMeta extends Model
         'twitter_description',
         'twitter_image',
         'robots',
-        'schema_type',
     ];
 
-    public function seoable(): MorphTo
+    /**
+     * SEO metadata belongs to content.
+     */
+    public function content(): BelongsTo
     {
-        return $this->morphTo();
+        return $this->belongsTo(Content::class);
     }
 }

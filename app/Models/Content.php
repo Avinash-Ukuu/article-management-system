@@ -3,14 +3,13 @@
 namespace App\Models;
 
 use App\Models\Category;
-use App\Models\SeoMeta;
 use App\Models\Tag;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Content extends Model
@@ -19,87 +18,105 @@ class Content extends Model
 
     protected $fillable = [
         'category_id',
-        'author_id',
         'title',
         'slug',
+        'content_type',
         'excerpt',
         'content',
         'featured_image',
-        'featured_image_alt',
-        'featured_image_caption',
-        'content_type',
+        'author_id',
+        'quote_author',
         'status',
         'published_at',
-        'reading_time',
-        'views',
         'is_featured',
-        'allow_comments',
-        'quote_author',
-        'quote_author_description',
-        'quote_source',
+        'views_count',
     ];
 
-    protected function casts(): array
-    {
-        return [
-            'published_at' => 'datetime',
-            'is_featured' => 'boolean',
-            'allow_comments' => 'boolean',
-            'views' => 'integer',
-            'reading_time' => 'integer',
-        ];
-    }
+    protected $casts = [
+        'published_at' => 'datetime',
+        'is_featured' => 'boolean',
+        'views_count' => 'integer',
+    ];
 
+    /**
+     * Content belongs to a category.
+     */
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
 
+    /**
+     * Content belongs to a user/author.
+     */
     public function author(): BelongsTo
     {
         return $this->belongsTo(User::class, 'author_id');
     }
 
+    /**
+     * Content belongs to many tags.
+     */
     public function tags(): BelongsToMany
     {
-        return $this->belongsToMany(Tag::class);
+        return $this->belongsToMany(
+            Tag::class,
+            'content_tag'
+        );
     }
 
-    public function seoMeta(): MorphOne
+    /**
+     * Content has one SEO metadata record.
+     */
+    public function seoMetadata(): HasOne
     {
-        return $this->morphOne(SeoMeta::class, 'seoable');
+        return $this->hasOne(SeoMetadata::class);
     }
 
+    /**
+     * Published content.
+     *
+     * Content is publicly visible only when:
+     * status = published
+     * AND published_at is null or already reached.
+     */
     public function scopePublished(Builder $query): Builder
     {
         return $query
             ->where('status', 'published')
+            ->where(function (Builder $query) {
+                $query
+                    ->whereNull('published_at')
+                    ->orWhere('published_at', '<=', now());
+            });
+    }
+
+    /**
+     * Draft content.
+     */
+    public function scopeDraft(Builder $query): Builder
+    {
+        return $query->where('status', 'draft');
+    }
+
+    /**
+     * Scheduled content.
+     */
+    public function scopeScheduled(Builder $query): Builder
+    {
+        return $query
+            ->where('status', 'scheduled')
             ->whereNotNull('published_at')
-            ->where('published_at', '<=', now());
+            ->where('published_at', '>', now());
     }
 
-    public function scopeBlogs(Builder $query): Builder
-    {
-        return $query->where('content_type', 'blog');
-    }
-
-    public function scopeArticles(Builder $query): Builder
-    {
-        return $query->where('content_type', 'article');
-    }
-
-    public function scopeQuotes(Builder $query): Builder
-    {
-        return $query->where('content_type', 'quote');
-    }
-
+    /**
+     * Featured content.
+     */
     public function scopeFeatured(Builder $query): Builder
     {
-        return $query->where('is_featured', true);
-    }
-
-    public function incrementViews(): void
-    {
-        $this->increment('views');
+        return $query
+            ->where('is_featured', true)
+            ->published();
     }
 }
