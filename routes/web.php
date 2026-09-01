@@ -1,10 +1,13 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
+
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    dd("hi");
+    return view('frontend.home');
+});
+Route::get('/detail', function () {
+    return view('frontend.detail');
 });
 
 
