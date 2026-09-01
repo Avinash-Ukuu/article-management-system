@@ -143,7 +143,7 @@
                         {!! Form::textarea('content', null, [
                             'class' => 'form-control',
                             'rows' => 18,
-                            'id' => 'content_editor',
+                            'id' => 'summernote',
                             'placeholder' => 'Write your content here...',
                         ]) !!}
 
