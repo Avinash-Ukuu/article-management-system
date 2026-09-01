@@ -114,6 +114,13 @@
                         <p>Tags</p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('cms.content.index') }}"
+                        class="nav-link @if (Route::currentRouteName() == 'cms.content.index') active @endif">
+                        <i class="far fa-dot-circle nav-icon"></i>
+                        <p>Content</p>
+                    </a>
+                </li>
 
             </ul>
         </nav>

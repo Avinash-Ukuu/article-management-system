@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\cms\CategoryController;
+use App\Http\Controllers\cms\ContentController;
 use App\Http\Controllers\cms\DashboardController;
 use App\Http\Controllers\cms\ModuleController;
 use App\Http\Controllers\cms\PermissionController;
@@ -39,7 +40,12 @@ Route::get("logout/switch/user",            [UserController::class,'logoutSwitch
 
 // Categories
 Route::resource('categories',               CategoryController::class);
-Route::patch('categories/{category}/toggle-status',    [CategoryController::class, 'toggleStatus'])->name('categories.toggle-status');
+Route::patch('categories/{category}/toggle-status',[CategoryController::class, 'toggleStatus'])->name('categories.toggle-status');
 
 // Tag
 Route::resource('tags',                     TagController::class);
+
+// Content
+Route::resource('content',                  ContentController::class);
+Route::patch('content/{content}/toggle-status',    [ContentController::class, 'toggleStatus'])->name('content.toggle-status');
+Route::patch('content/{content}/toggle-featured',  [ContentController::class, 'toggleFeatured'])->name('content.toggle-featured');

@@ -78,7 +78,11 @@ CREATE TABLE `content_tag` (
 /*Data for the table `content_tag` */
 
 insert  into `content_tag`(`content_id`,`tag_id`) values 
-(1,1);
+(1,1),
+(2,1),
+(2,3),
+(3,1),
+(3,3);
 
 /*Table structure for table `contents` */
 
@@ -89,6 +93,7 @@ CREATE TABLE `contents` (
   `category_id` bigint(20) unsigned NOT NULL,
   `author_id` bigint(20) unsigned NOT NULL,
   `title` varchar(255) NOT NULL,
+  `content_type` varchar(255) DEFAULT NULL,
   `slug` varchar(255) NOT NULL,
   `excerpt` text DEFAULT NULL,
   `content` longtext NOT NULL,
@@ -110,12 +115,12 @@ CREATE TABLE `contents` (
   KEY `contents_is_featured_index` (`is_featured`),
   CONSTRAINT `contents_author_id_foreign` FOREIGN KEY (`author_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `contents_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /*Data for the table `contents` */
 
-insert  into `contents`(`id`,`category_id`,`author_id`,`title`,`slug`,`excerpt`,`content`,`featured_image`,`quote_author`,`status`,`published_at`,`views_count`,`is_featured`,`created_at`,`updated_at`,`deleted_at`) values 
-(1,1,2,'Laravel 12 Tutorial','laravel-12-tutorial','A Laravel 12 tutorial.','Sample content.',NULL,NULL,'published','2026-08-30 16:47:14',0,0,'2026-08-30 16:47:14','2026-08-30 16:47:14',NULL);
+insert  into `contents`(`id`,`category_id`,`author_id`,`title`,`content_type`,`slug`,`excerpt`,`content`,`featured_image`,`quote_author`,`status`,`published_at`,`views_count`,`is_featured`,`created_at`,`updated_at`,`deleted_at`) values 
+(3,1,1,'10 Laravel Tips Every Developer Should Know','blog','10-laravel-tips-every-developer-should-know','Like a skyscraper, the launch of Laravel application requires solid foundations to safely build additional floors (features). Over time, the Laravel ecosystem continues to expand and become complicated; what may have been considered a solid, durable structure during the last update now contains critical areas of weakness.','Like a skyscraper, the launch of Laravel application requires solid foundations to safely build additional floors (features). Over time, the Laravel ecosystem continues to expand and become complicated; what may have been considered a solid, durable structure during the last update now contains critical areas of weakness.Like a skyscraper, the launch of Laravel application requires solid foundations to safely build additional floors (features). Over time, the Laravel ecosystem continues to expand and become complicated; what may have been considered a solid, durable structure during the last update now contains critical areas of weakness.Like a skyscraper, the launch of Laravel application requires solid foundations to safely build additional floors (features). Over time, the Laravel ecosystem continues to expand and become complicated; what may have been considered a solid, durable structure during the last update now contains critical areas of weakness.Like a skyscraper, the launch of Laravel application requires solid foundations to safely build additional floors (features). Over time, the Laravel ecosystem continues to expand and become complicated; what may have been considered a solid, durable structure during the last update now contains critical areas of weakness.Like a skyscraper, the launch of Laravel application requires solid foundations to safely build additional floors (features). Over time, the Laravel ecosystem continues to expand and become complicated; what may have been considered a solid, durable structure during the last update now contains critical areas of weakness.Like a skyscraper, the launch of Laravel application requires solid foundations to safely build additional floors (features). Over time, the Laravel ecosystem continues to expand and become complicated; what may have been considered a solid, durable structure during the last update now contains critical areas of weakness.Like a skyscraper, the launch of Laravel application requires solid foundations to safely build additional floors (features). Over time, the Laravel ecosystem continues to expand and become complicated; what may have been considered a solid, durable structure during the last update now contains critical areas of weakness.\r\nLike a skyscraper, the launch of Laravel application requires solid foundations to safely build additional floors (features). Over time, the Laravel ecosystem continues to expand and become complicated; what may have been considered a solid, durable structure during the last update now contains critical areas of weakness.Like a skyscraper, the launch of Laravel application requires solid foundations to safely build additional floors (features). Over time, the Laravel ecosystem continues to expand and become complicated; what may have been considered a solid, durable structure during the last update now contains critical areas of weakness.','content_1788251293.png',NULL,'published','2026-09-01 08:28:21',0,1,'2026-09-01 08:28:13','2026-09-01 08:28:21',NULL);
 
 /*Table structure for table `failed_jobs` */
 
@@ -304,13 +309,6 @@ CREATE TABLE `seo_metadata` (
   `meta_title` varchar(255) DEFAULT NULL,
   `meta_description` text DEFAULT NULL,
   `meta_keywords` text DEFAULT NULL,
-  `canonical_url` varchar(2048) DEFAULT NULL,
-  `og_title` varchar(255) DEFAULT NULL,
-  `og_description` text DEFAULT NULL,
-  `og_image` varchar(255) DEFAULT NULL,
-  `twitter_title` varchar(255) DEFAULT NULL,
-  `twitter_description` text DEFAULT NULL,
-  `twitter_image` varchar(255) DEFAULT NULL,
   `robots` varchar(100) DEFAULT 'index, follow',
   `schema_type` varchar(100) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -318,9 +316,12 @@ CREATE TABLE `seo_metadata` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `seo_meta_seoable_unique` (`content_id`),
   KEY `seo_meta_seoable_index` (`content_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /*Data for the table `seo_metadata` */
+
+insert  into `seo_metadata`(`id`,`content_id`,`meta_title`,`meta_description`,`meta_keywords`,`robots`,`schema_type`,`created_at`,`updated_at`) values 
+(2,3,'10 Laravel Tips Every Developer Should Know','10 Laravel Tips Every Developer Should Know10 Laravel Tips Every Developer Should Know10 Laravel Tips Every Developer Should Know10 Laravel Tips Every Developer Should Know10 Laravel Tips Every Developer Should Know10 Laravel Tips Every Developer Should Know10 Laravel Tips Every Developer Should Know','laravel, php, laravel 12','index,follow',NULL,'2026-09-01 08:28:13','2026-09-01 08:28:13');
 
 /*Table structure for table `sessions` */
 
@@ -341,7 +342,7 @@ CREATE TABLE `sessions` (
 /*Data for the table `sessions` */
 
 insert  into `sessions`(`id`,`user_id`,`ip_address`,`user_agent`,`payload`,`last_activity`) values 
-('n1L62aS3fpBVRQcYiGa5iqJMy0JHNEFSv6YTCZFR',1,'127.0.0.1','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36','YTo1OntzOjY6Il90b2tlbiI7czo0MDoibXZkazZ6TE5WU1JJc0FCUEZEeGt2WUR4d2JOVW9qRWZQY0N1M3ZCSiI7czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjI6e3M6MzoidXJsIjtzOjMwOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvY21zL3RhZ3MiO3M6NToicm91dGUiO3M6MTQ6ImNtcy50YWdzLmluZGV4Ijt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MTt9',1788202132);
+('s2o2vi5CvAZAOnGF0rTwxLCHquK9wQ0z05mjEAmH',1,'127.0.0.1','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36','YTo0OntzOjY6Il90b2tlbiI7czo0MDoia01reFBZczcwc0FmV0tlTmppTmZWWUc0cnJIWjFHWnZvN3RubGFYQiI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6NDA6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9jbXMvY29udGVudC8zL2VkaXQiO3M6NToicm91dGUiO3M6MTY6ImNtcy5jb250ZW50LmVkaXQiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxO30=',1788251304);
 
 /*Table structure for table `tags` */
 
