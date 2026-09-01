@@ -1,17 +1,18 @@
 @extends('cms.layouts.master')
 @section('content')
+<div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="{{ route('cms.dashboard') }}">Dashboard</a></li>
+                        <li class="breadcrumb-item active">Tags List</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div>
+    </div>
     <div class="container-fluid">
-        {{-- Flash Messages --}}
-        @if (session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
-        @if (session('error'))
-            <div class="alert alert-danger">
-                {{ session('error') }}
-            </div>
-        @endif
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">Tags</h3>

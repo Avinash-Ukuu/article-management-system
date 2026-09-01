@@ -1,9 +1,22 @@
 @extends('cms.layouts.master')
 @section('title', $tag->exists ? 'Edit Tag' : 'Add Tag')
 @section('content')
+<div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="{{ route('cms.dashboard') }}">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('cms.tags.index') }}">Tags</a></li>
+                        <li class="breadcrumb-item active">Tag Form</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div>
+    </div>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">
@@ -24,27 +37,6 @@
 
                     <div class="card-body">
 
-                        @if ($errors->any())
-
-                            <div class="alert alert-danger">
-
-                                <strong>
-                                    Please fix the following errors:
-                                </strong>
-
-                                <ul class="mb-0 mt-2">
-
-                                    @foreach ($errors->all() as $error)
-                                        <li>
-                                            {{ $error }}
-                                        </li>
-                                    @endforeach
-
-                                </ul>
-
-                            </div>
-
-                        @endif
 
 
                         {{-- Tag Name --}}

@@ -57,14 +57,26 @@ CREATE TABLE `categories` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `categories_slug_unique` (`slug`),
   KEY `categories_status_index` (`status`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /*Data for the table `categories` */
 
 insert  into `categories`(`id`,`name`,`slug`,`description`,`status`,`created_at`,`updated_at`) values 
 (1,'Technology','technology',NULL,1,'2026-08-30 16:46:20','2026-08-31 16:53:32'),
 (2,'Lifestyle','lifestyle','testing Lifestyle',1,'2026-08-31 16:56:01','2026-08-31 16:56:01'),
-(3,'Business','business',NULL,1,'2026-08-31 16:56:36','2026-08-31 18:46:43');
+(3,'Business','business',NULL,1,'2026-08-31 16:56:36','2026-08-31 18:46:43'),
+(4,'Health & Wellness','health-wellness',NULL,1,'2026-09-01 09:28:13','2026-09-01 09:28:13'),
+(5,'Finance','finance',NULL,1,'2026-09-01 09:28:41','2026-09-01 09:28:41'),
+(6,'Education','education',NULL,1,'2026-09-01 09:28:52','2026-09-01 09:28:52'),
+(7,'Career','career',NULL,1,'2026-09-01 09:29:00','2026-09-01 09:29:00'),
+(8,'Travel','travel',NULL,1,'2026-09-01 09:29:11','2026-09-01 09:29:11'),
+(9,'Food & Recipes','food-recipes',NULL,1,'2026-09-01 09:29:20','2026-09-01 09:29:20'),
+(10,'Fitness','fitness',NULL,1,'2026-09-01 09:29:28','2026-09-01 09:29:28'),
+(11,'Relationships','relationships',NULL,1,'2026-09-01 09:29:36','2026-09-01 09:29:36'),
+(12,'Personal Development','personal-development',NULL,1,'2026-09-01 09:29:49','2026-09-01 09:29:49'),
+(13,'Entertainment','entertainment',NULL,1,'2026-09-01 09:29:58','2026-09-01 09:29:58'),
+(14,'Sports','sports',NULL,1,'2026-09-01 09:30:06','2026-09-01 09:30:06'),
+(15,'Motivation','motivation',NULL,1,'2026-09-01 09:30:14','2026-09-01 09:30:14');
 
 /*Table structure for table `content_tag` */
 
@@ -76,13 +88,6 @@ CREATE TABLE `content_tag` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `content_tag` */
-
-insert  into `content_tag`(`content_id`,`tag_id`) values 
-(1,1),
-(2,1),
-(2,3),
-(3,1),
-(3,3);
 
 /*Table structure for table `contents` */
 
@@ -121,7 +126,7 @@ CREATE TABLE `contents` (
 
 insert  into `contents`(`id`,`category_id`,`author_id`,`title`,`content_type`,`slug`,`excerpt`,`content`,`featured_image`,`quote_author`,`status`,`published_at`,`views_count`,`is_featured`,`created_at`,`updated_at`,`deleted_at`) values 
 (3,1,1,'10 Laravel Tips Every Developer Should Know','blog','10-laravel-tips-every-developer-should-know','Like a skyscraper, the launch of Laravel application requires solid foundations to safely build additional floors (features). Over time, the Laravel ecosystem continues to expand and become complicated; what may have been considered a solid, durable structure during the last update now contains critical areas of weakness.','<p>Like a skyscraper, the launch of <b>Laravel </b>application requires solid foundations to safely build additional floors (features). Over time, the Laravel ecosystem continues to expand and become complicated; </p><ol><li>what may have been considered a solid, durable structure during the </li><li>last update now contains critical areas of weakness.Like a skyscraper, the launch of Laravel application requires solid foundations to safely build additional floors (features). Over time, the Laravel ecosystem continues to expand and become complicated; what may have been considered a solid, durable structure during the last update now contains critical areas of weakness.Like a skyscraper, the launch of Laravel application requires solid foundations to safely build additional floors (features). Over time, the Laravel ecosystem continues to expand and become complicated; what may have been considered a solid, durable structure during the last update now contains critical areas of weakness.Like a skyscraper, the launch of Laravel application requires solid foundations to safely build additional floors (features). Over time, the Laravel ecosystem continues to expand and become complicated; what may have been considered a solid, durable structure during the last update now contains critical areas of weakness.Like a skyscraper, the launch of Laravel application requires solid foundations to safely build additional floors (features). Over time, the Laravel ecosystem continues to expand and become complicated; what may have been considered a solid, durable structure during the last update now contains critical areas of weakness.Like a skyscraper, the launch of Laravel application requires solid foundations to safely build additional floors (features). Over time, the Laravel ecosystem continues to expand and become complicated; what may have been considered a solid, durable structure during the last update now contains critical areas of weakness.Like a skyscraper, the launch of Laravel application requires solid foundations to safely build additional floors (features). Over time, the Laravel ecosystem continues to expand and become complicated; what may have been considered a solid, durable structure during the last update now contains critical areas of weakness.\r\nLike a skyscraper, the launch of Laravel application requires solid foundations to safely build additional floors (features). Over time, the Laravel ecosystem continues to expand and become complicated; what may have been considered a solid, durable structure during the last update now contains critical areas of weakness.Like a skyscraper, the launch of Laravel application requires solid foundations to safely build additional floors (features). Over time, the Laravel ecosystem continues to expand and become complicated; what may have been considered a solid, durable structure during the last update now contains critical areas of weakness.</li></ol>','content_1788251293.png',NULL,'published','2026-09-01 08:28:00',0,1,'2026-09-01 08:28:13','2026-09-01 08:32:48',NULL),
-(4,2,1,'Success Quote','quote','success-quote',NULL,'<p>Success is not final; failure is not fatal.</p>',NULL,'Winston Churchill','published','2026-09-01 08:34:17',0,0,'2026-09-01 08:34:17','2026-09-01 08:34:17',NULL);
+(4,2,1,'Success Quote','quote','success-quote',NULL,'<p>Success is not final; failure is not fatal.</p>',NULL,'Winston Churchill','draft','2026-09-01 08:34:17',0,1,'2026-09-01 08:34:17','2026-09-01 09:13:17',NULL);
 
 /*Table structure for table `failed_jobs` */
 
@@ -344,7 +349,7 @@ CREATE TABLE `sessions` (
 /*Data for the table `sessions` */
 
 insert  into `sessions`(`id`,`user_id`,`ip_address`,`user_agent`,`payload`,`last_activity`) values 
-('s2o2vi5CvAZAOnGF0rTwxLCHquK9wQ0z05mjEAmH',1,'127.0.0.1','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36','YTo0OntzOjY6Il90b2tlbiI7czo0MDoia01reFBZczcwc0FmV0tlTmppTmZWWUc0cnJIWjFHWnZvN3RubGFYQiI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6MzM6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9jbXMvY29udGVudCI7czo1OiJyb3V0ZSI7czoxNzoiY21zLmNvbnRlbnQuaW5kZXgiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxO30=',1788251726);
+('ASViuKvRSnbRD6xdyLvIcwLtWJDdotb1VBgg9NEh',1,'127.0.0.1','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36','YTo0OntzOjY6Il90b2tlbiI7czo0MDoiYTd2QWliY0dsZDJOTE50M1UzSU5YN3huTmxVYnlnVkxydkp2YlpObCI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6Mzc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9jbXMvdGFncy9jcmVhdGUiO3M6NToicm91dGUiO3M6MTU6ImNtcy50YWdzLmNyZWF0ZSI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjE7fQ==',1788256983);
 
 /*Table structure for table `tags` */
 
@@ -358,14 +363,53 @@ CREATE TABLE `tags` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `tags_slug_unique` (`slug`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /*Data for the table `tags` */
 
 insert  into `tags`(`id`,`name`,`slug`,`created_at`,`updated_at`) values 
-(1,'Laravel','laravel','2026-08-30 16:48:49','2026-08-30 16:48:49'),
-(3,'Web Development','web-development','2026-08-31 17:35:59','2026-08-31 17:35:59'),
-(4,'instagram','instagram-in-jalandhar','2026-08-31 18:37:12','2026-08-31 18:37:26');
+(1,'Morning Habits','morning-habits','2026-09-01 09:48:48','2026-09-01 09:48:48'),
+(2,'Morning Routine','morning-routine','2026-09-01 09:48:59','2026-09-01 09:48:59'),
+(3,'Productivity','productivity','2026-09-01 09:49:09','2026-09-01 09:49:09'),
+(4,'Daily Habits','daily-habits','2026-09-01 09:49:17','2026-09-01 09:49:17'),
+(5,'Healthy Habits','healthy-habits','2026-09-01 09:49:25','2026-09-01 09:49:25'),
+(6,'Work From Home','work-from-home','2026-09-01 09:49:49','2026-09-01 09:49:49'),
+(7,'Time Management','time-management','2026-09-01 09:49:57','2026-09-01 09:49:57'),
+(8,'Focus','focus','2026-09-01 09:50:09','2026-09-01 09:50:09'),
+(9,'Remote Work','remote-work','2026-09-01 09:50:20','2026-09-01 09:50:20'),
+(10,'Artificial Intelligence','artificial-intelligence','2026-09-01 09:55:55','2026-09-01 09:55:55'),
+(11,'AI','ai','2026-09-01 09:56:03','2026-09-01 09:56:03'),
+(12,'Automation','automation','2026-09-01 09:56:15','2026-09-01 09:56:15'),
+(13,'Technology Trends','technology-trends','2026-09-01 09:56:31','2026-09-01 09:56:31'),
+(14,'Self Improvement','self-improvement','2026-09-01 09:56:42','2026-09-01 09:56:42'),
+(15,'Personal Growth','personal-growth','2026-09-01 09:57:00','2026-09-01 09:57:00'),
+(16,'Life Lessons','life-lessons','2026-09-01 09:57:08','2026-09-01 09:57:08'),
+(17,'Success','success','2026-09-01 09:57:21','2026-09-01 09:57:21'),
+(18,'Consistency','consistency','2026-09-01 09:57:30','2026-09-01 09:57:30'),
+(19,'Discipline','discipline','2026-09-01 09:57:40','2026-09-01 09:57:40'),
+(20,'Success Mindset','success-mindset','2026-09-01 09:58:14','2026-09-01 09:58:14'),
+(21,'Saving Money','saving-money','2026-09-01 09:58:31','2026-09-01 09:58:31'),
+(22,'Money Management','money-management','2026-09-01 09:58:44','2026-09-01 09:58:44'),
+(23,'Budgeting','budgeting','2026-09-01 09:58:56','2026-09-01 09:58:56'),
+(24,'Personal Finance','personal-finance','2026-09-01 09:59:05','2026-09-01 09:59:05'),
+(25,'Indian Recipes','indian-recipes','2026-09-01 09:59:15','2026-09-01 09:59:15'),
+(26,'Easy Recipes','easy-recipes','2026-09-01 09:59:25','2026-09-01 09:59:25'),
+(27,'Quick Recipes','quick-recipes','2026-09-01 09:59:35','2026-09-01 09:59:35'),
+(28,'Dinner Recipes','dinner-recipes','2026-09-01 09:59:44','2026-09-01 09:59:44'),
+(29,'Home Workout','home-workout','2026-09-01 10:00:22','2026-09-01 10:00:22'),
+(30,'Beginner Workout','beginner-workout','2026-09-01 10:00:36','2026-09-01 10:00:36'),
+(31,'Exercise','exercise','2026-09-01 10:00:44','2026-09-01 10:00:44'),
+(32,'Fitness Tips','fitness-tips','2026-09-01 10:00:56','2026-09-01 10:00:56'),
+(33,'Resume','resume','2026-09-01 10:01:06','2026-09-01 10:01:06'),
+(34,'Resume Tips','resume-tips','2026-09-01 10:01:17','2026-09-01 10:01:17'),
+(35,'Job Search','job-search','2026-09-01 10:01:26','2026-09-01 10:01:26'),
+(36,'Career Advice','career-advice','2026-09-01 10:01:35','2026-09-01 10:01:35'),
+(37,'Budget Travel','budget-travel','2026-09-01 10:01:48','2026-09-01 10:01:48'),
+(38,'Travel Tips','travel-tips','2026-09-01 10:02:04','2026-09-01 10:02:04'),
+(39,'Travel Destinations','travel-destinations','2026-09-01 10:02:13','2026-09-01 10:02:13'),
+(40,'Vacation','vacation','2026-09-01 10:02:20','2026-09-01 10:02:20'),
+(41,'Job Interview','job-interview','2026-09-01 10:02:31','2026-09-01 10:02:31'),
+(42,'Interview Tips','interview-tips','2026-09-01 10:02:43','2026-09-01 10:02:43');
 
 /*Table structure for table `users` */
 

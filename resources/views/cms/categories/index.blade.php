@@ -38,7 +38,7 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $category->name }}</td>
-                                    <td>{{ $category->slug }}</td>
+                                    <td><code>{{ $category->slug }}</code></td>
                                     <td>{{ $category->contents_count }}</td>
                                     <td>
                                         @if ($category->status)
@@ -56,7 +56,7 @@
                                         <div class="row">
                                             <a href="{{ route('cms.categories.edit', ['category' => $category->id]) }}"><i
                                                     class="fa fa-edit"></i></a>
-                                            <form action="{{ route('cms.categories.toggle-status', $category) }}"
+                                            {{-- <form action="{{ route('cms.categories.toggle-status', $category) }}"
                                                 method="POST" class="d-inline">
 
                                                 @csrf
@@ -69,7 +69,7 @@
                                                     {{ $category->status ? 'Disable' : 'Enable' }}
 
                                                 </button>
-
+                                            </form> --}}
                                         </div>
                                     </td>
                                 </tr>

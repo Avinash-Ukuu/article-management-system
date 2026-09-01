@@ -1,6 +1,19 @@
 @extends('cms.layouts.master')
 @section('title', $category->exists ? 'Edit Category' : 'Add Category')
 @section('content')
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="{{ route('cms.dashboard') }}">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('cms.categories.index') }}">Category</a></li>
+                        <li class="breadcrumb-item active">Category Form</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div>
+    </div>
     <div class="container-fluid">
 
         <div class="row">

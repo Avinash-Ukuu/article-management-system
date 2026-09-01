@@ -5,7 +5,9 @@ namespace App\Http\Controllers\cms;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TagRequest;
 use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 
 class TagController extends Controller
@@ -78,6 +80,7 @@ class TagController extends Controller
      */
     public function destroy(Tag $tag)
     {
+        Gate::authorize('superAdmin', new User());
         $tag->delete();
 
         return redirect()->route('cms.tags.index')->with('success', 'Tag deleted successfully.');
