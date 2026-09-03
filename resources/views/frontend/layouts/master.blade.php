@@ -6,7 +6,8 @@
     <meta name="hosting-provider" content="Netlify">
     <meta name="netlify-deploy"
         content="https://netlify.new/?utm_campaign=ai-legible&amp;utm_source=meta&amp;utm_medium=referral&amp;utm_id=65552bbf-c459-4c4a-b1e0-d43e92a7035a">
-    <title>Retnews – Best news, blog &amp; magazine template </title>
+    <title> @yield('title', 'Best Blog - Article') </title>
+     @stack('meta')
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
