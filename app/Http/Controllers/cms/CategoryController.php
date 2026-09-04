@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class CategoryController extends Controller
@@ -15,7 +16,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::query()->withCount('contents')->latest()->paginate(15);
+        $categories = Category::query()->withCount('contents')->orderBy('position')->paginate(15);
 
         return view('cms.categories.index', compact('categories'));
     }
@@ -112,5 +113,29 @@ class CategoryController extends Controller
         return redirect()
             ->route('cms.categories.index')
             ->with('success', 'Category status updated successfully.');
+    }
+
+    public function updatePosition(Request $request)
+    {
+        $validated  =   $request->validate([
+                            'categories' => ['required', 'array'],
+                            'categories.*' => ['integer', 'exists:categories,id'],
+                        ]);
+
+        DB::transaction(function () use ($validated) {
+
+            foreach ($validated['categories'] as $position => $categoryId) {
+
+                Category::where('id', $categoryId)
+                    ->update([
+                        'position' => $position + 1,
+                    ]);
+            }
+        });
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Category positions updated successfully.',
+        ]);
     }
 }

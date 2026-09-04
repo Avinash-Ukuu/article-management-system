@@ -25,20 +25,28 @@
                         <thead>
                             <tr>
                                 <th width="70">ID</th>
+                                <th>Move</th>
                                 <th>Name</th>
                                 <th>Slug</th>
+                                <th>Position</th>
                                 <th>Content</th>
                                 <th>Status</th>
                                 <th>Created</th>
                                 <th width="220">Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="category-sortable">
                             @foreach ($categories as $category)
-                                <tr>
+                                <tr data-id="{{ $category->id }}">
                                     <td>{{ $loop->iteration }}</td>
+                                    <td>
+                                        <i class="fas fa-grip-vertical text-muted" style="cursor: move;"></i>
+                                    </td>
                                     <td>{{ $category->name }}</td>
                                     <td><code>{{ $category->slug }}</code></td>
+                                    <td> <span class="badge badge-info">
+                                            {{ $category->position }}
+                                        </span></td>
                                     <td>{{ $category->contents_count }}</td>
                                     <td>
                                         @if ($category->status)
@@ -56,7 +64,7 @@
                                         <div class="row">
                                             <a href="{{ route('cms.categories.edit', ['category' => $category->id]) }}"><i
                                                     class="fa fa-edit"></i></a>
-                                            {{-- <form action="{{ route('cms.categories.toggle-status', $category) }}"
+                                            <form action="{{ route('cms.categories.toggle-status', $category) }}"
                                                 method="POST" class="d-inline">
 
                                                 @csrf
@@ -69,7 +77,7 @@
                                                     {{ $category->status ? 'Disable' : 'Enable' }}
 
                                                 </button>
-                                            </form> --}}
+                                            </form>
                                         </div>
                                     </td>
                                 </tr>
@@ -85,4 +93,48 @@
             @endif
         </div>
     </div>
+@endsection
+@section('footerScript')
+    {{-- <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js"></script> --}}
+    <script src="{{asset('assets/frontend/js/sortable.min.js')}}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sortable = document.getElementById('category-sortable');
+            if (!sortable) {
+                return;
+            }
+            new Sortable(sortable, {
+                animation: 150,
+                handle: '.fa-grip-vertical',
+                onEnd: function() {
+                    let categories = [];
+                    document
+                        .querySelectorAll('#category-sortable tr')
+                        .forEach(function(row) {
+                            categories.push(row.dataset.id);
+                        });
+                    fetch("{{ route('cms.categories.update-position') }}", {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                categories: categories
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                console.log(data.message);
+                            }
+                        })
+                        .catch(error => {
+                            console.error(error);
+                        });
+                }
+            });
+        });
+    </script>
 @endsection

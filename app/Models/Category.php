@@ -14,10 +14,12 @@ class Category extends Model
         'slug',
         'description',
         'status',
+        'position',
     ];
 
     protected $casts = [
         'status' => 'boolean',
+        'position' => 'integer',
     ];
 
     /**
@@ -34,5 +36,13 @@ class Category extends Model
     public function scopeActive($query)
     {
         return $query->where('status', true);
+    }
+
+    public function scopeActiveOrdered($query)
+    {
+        return $query
+            ->where('status', true)
+            ->orderBy('position')
+            ->orderBy('id');
     }
 }

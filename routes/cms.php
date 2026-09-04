@@ -41,6 +41,7 @@ Route::get("logout/switch/user",            [UserController::class,'logoutSwitch
 // Categories
 Route::resource('categories',               CategoryController::class);
 Route::patch('categories/{category}/toggle-status',[CategoryController::class, 'toggleStatus'])->name('categories.toggle-status');
+Route::post('/categories/update-position',  [CategoryController::class, 'updatePosition'])->name('categories.update-position');
 
 // Tag
 Route::resource('tags',                     TagController::class);
