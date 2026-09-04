@@ -253,8 +253,6 @@ class HomeController extends Controller
         return view('frontend.detail', compact(
             'content',
             'relatedContents',
-            // 'previousContent',
-            // 'nextContent',
             'latestPosts',
             'popularPosts',
             'sidebarTags'

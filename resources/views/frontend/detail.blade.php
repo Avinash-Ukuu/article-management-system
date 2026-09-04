@@ -205,7 +205,7 @@
                     </div>
 
                     @if ($content->tags->isNotEmpty())
-                        <div class="blog-tags">
+                        <div class="blog-tags mb-30">
                             <ul class="list-inline">
                                 <li class="list-inline-item">
                                     <i class="fa fa-tags"></i>
@@ -221,7 +221,7 @@
                         </div>
                     @endif
 
-                    @if ($content->author)
+                    {{-- @if ($content->author)
                         <div class="wrap__profile">
                             <div class="wrap__profile-author">
                                 <figure>
@@ -239,7 +239,7 @@
                                 </div>
                             </div>
                         </div>
-                    @endif
+                    @endif --}}
 
                     <div class="clearfix"></div>
 
@@ -411,57 +411,7 @@
                             </div>
                         </aside>
 
-                        <aside class="wrapper__list__article">
-                            <h4 class="border_section">
-                                stay connected
-                            </h4>
 
-                            <div class="wrap__social__media">
-                                <a href="#" target="_blank">
-                                    <div class="social__media__widget facebook">
-                                        <span class="social__media__widget-icon">
-                                            <i class="fa fa-facebook"></i>
-                                        </span>
-                                        <span class="social__media__widget-counter">
-                                            19,243 fans
-                                        </span>
-                                        <span class="social__media__widget-name">
-                                            like
-                                        </span>
-                                    </div>
-                                </a>
-
-                                <a href="#" target="_blank">
-                                    <div class="social__media__widget twitter">
-                                        <span class="social__media__widget-icon">
-                                            <i class="fa fa-twitter"></i>
-                                        </span>
-                                        <span class="social__media__widget-counter">
-                                            2,076 followers
-                                        </span>
-                                        <span class="social__media__widget-name">
-                                            follow
-                                        </span>
-                                    </div>
-                                </a>
-
-                                <a href="#" target="_blank">
-                                    <div class="social__media__widget youtube">
-                                        <span class="social__media__widget-icon">
-                                            <i class="fa fa-youtube"></i>
-                                        </span>
-                                        <span class="social__media__widget-counter">
-                                            15,200 followers
-                                        </span>
-
-                                        <span class="social__media__widget-name">
-                                            subscribe
-                                        </span>
-
-                                    </div>
-                                </a>
-                            </div>
-                        </aside>
 
                         @if ($sidebarTags->isNotEmpty())
                             <aside class="wrapper__list__article">
