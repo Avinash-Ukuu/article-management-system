@@ -7,11 +7,11 @@
         <meta name="keywords" content="{{ $content->seoMetadata->meta_keywords }}">
     @endif
     <meta name="robots" content="{{ $content->seoMetadata?->robots ?: 'index, follow' }}">
-    <link rel="canonical" href="{{ route('content.show', $content->slug) }}">
+    <link rel="canonical" href="{{ route('content.show', [ 'category' => $content->category->slug,'slug' => $content->slug,]) }}">
     <meta property="og:type" content="article">
     <meta property="og:title" content="{{ $content->seoMetadata?->meta_title ?: $content->title }}">
     <meta property="og:description" content="{{ $content->seoMetadata?->meta_description ?: $content->excerpt }}">
-    <meta property="og:url" content="{{ route('content.show', $content->slug) }}">
+    <meta property="og:url" content="{{ route('content.show', [ 'category' => $content->category->slug,'slug' => $content->slug,]) }}">
     @if ($content->featured_image)
         <meta property="og:image" content="{{ asset('uploads/contents/' . $content->featured_image) }}">
     @endif
@@ -129,7 +129,7 @@
                                 <ul class="list-inline">
                                     <li class="list-inline-item">
                                         <a class="btn btn-social-o facebook"
-                                            href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(route('content.show', $content->slug)) }}"
+                                            href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(route('content.show', [ 'category' => $content->category->slug,'slug' => $content->slug,])) }}"
                                             target="_blank" rel="noopener noreferrer">
                                             <i class="fa fa-facebook-f"></i>
                                             <span>
@@ -141,7 +141,7 @@
 
                                     <li class="list-inline-item">
                                         <a class="btn btn-social-o twitter"
-                                            href="https://twitter.com/intent/tweet?url={{ urlencode(route('content.show', $content->slug)) }}&text={{ urlencode($content->title) }}"
+                                            href="https://twitter.com/intent/tweet?url={{ urlencode(route('content.show', [ 'category' => $content->category->slug,'slug' => $content->slug,])) }}&text={{ urlencode($content->title) }}"
                                             target="_blank" rel="noopener noreferrer">
                                             <i class="fa fa-twitter"></i>
                                             <span>
@@ -153,7 +153,7 @@
 
                                     <li class="list-inline-item">
                                         <a class="btn btn-social-o whatsapp"
-                                            href="https://api.whatsapp.com/send?text={{ urlencode($content->title . ' ' . route('content.show', $content->slug)) }}"
+                                            href="https://api.whatsapp.com/send?text={{ urlencode($content->title . ' ' . route('content.show', [ 'category' => $content->category->slug,'slug' => $content->slug,])) }}"
                                             target="_blank" rel="noopener noreferrer">
                                             <i class="fa fa-whatsapp"></i>
                                             <span>
@@ -165,7 +165,7 @@
 
                                     <li class="list-inline-item">
                                         <a class="btn btn-social-o telegram"
-                                            href="https://t.me/share/url?url={{ urlencode(route('content.show', $content->slug)) }}&text={{ urlencode($content->title) }}"
+                                            href="https://t.me/share/url?url={{ urlencode(route('content.show', [ 'category' => $content->category->slug,'slug' => $content->slug,])) }}&text={{ urlencode($content->title) }}"
                                             target="_blank" rel="noopener noreferrer">
                                             <i class="fa fa-telegram"></i>
                                             <span>
@@ -177,7 +177,7 @@
 
                                     <li class="list-inline-item">
                                         <a class="btn btn-linkedin-o linkedin"
-                                            href="https://www.linkedin.com/sharing/share-offsite/?url={{ urlencode(route('content.show', $content->slug)) }}"
+                                            href="https://www.linkedin.com/sharing/share-offsite/?url={{ urlencode(route('content.show', [ 'category' => $content->category->slug,'slug' => $content->slug,])) }}"
                                             target="_blank" rel="noopener noreferrer">
                                             <i class="fa fa-linkedin"></i>
                                             <span>
@@ -260,7 +260,7 @@
                                             {{-- Image --}}
                                             @if ($related->featured_image)
                                                 <div class="article__image">
-                                                    <a href="{{ route('content.show', $related->slug) }}">
+                                                    <a href="{{ route('content.show', [ 'category' => $related->category->slug,'slug' => $related->slug,]) }}">
                                                         <img src="{{ asset('uploads/contents/' . $related->featured_image) }}"
                                                             alt="{{ $related->title }}" class="img-fluid"
                                                             loading="lazy">
@@ -285,7 +285,7 @@
                                                     </li>
                                                 </ul>
                                                 <h5>
-                                                    <a href="{{ route('content.show', $related->slug) }}">
+                                                    <a href="{{ route('content.show',[ 'category' => $related->category->slug,'slug' => $related->slug,]) }}">
                                                         {{ $related->title }}
                                                     </a>
                                                 </h5>
@@ -332,7 +332,7 @@
                                         <div class="card__post card__post-list">
                                             {{-- Image --}}
                                             <div class="image-sm">
-                                                <a href="{{ route('content.show', $latest->slug) }}">
+                                                <a href="{{ route('content.show', [ 'category' => $latest->category->slug,'slug' => $latest->slug,]) }}">
 
                                                     @if ($latest->featured_image)
                                                         <img src="{{ asset('uploads/contents/' . $latest->featured_image) }}"
@@ -362,7 +362,7 @@
 
                                                     <div class="card__post__title">
                                                         <h6>
-                                                            <a href="{{ route('content.show', $latest->slug) }}">
+                                                            <a href="{{ route('content.show', [ 'category' => $latest->category->slug,'slug' => $latest->slug,]) }}">
                                                                 {{ $latest->title }}
                                                             </a>
                                                         </h6>
@@ -385,7 +385,7 @@
                                     <div class="mb-3">
                                         <div class="card__post card__post-list">
                                             <div class="image-sm">
-                                                <a href="{{ route('content.show', $popular->slug) }}">
+                                                <a href="{{ route('content.show', [ 'category' => $popular->category->slug,'slug' => $popular->slug,]) }}">
                                                     @if ($popular->featured_image)
                                                         <img src="{{ asset('uploads/contents/' . $popular->featured_image) }}"
                                                             class="img-fluid" alt="{{ $popular->title }}"
@@ -398,7 +398,7 @@
                                                 <div class="card__post__content">
                                                     <div class="card__post__title">
                                                         <h6>
-                                                            <a href="{{ route('content.show', $popular->slug) }}">
+                                                            <a href="{{ route('content.show', [ 'category' => $popular->category->slug,'slug' => $popular->slug,]) }}">
                                                                 {{ $popular->title }}
                                                             </a>
                                                         </h6>

@@ -13,7 +13,7 @@
         };
 
         $postUrl = function ($post) {
-            return route('content.show',['slug'=> $post->slug]);
+            return route('content.show',[ 'category' => $post->category->slug,'slug' => $post->slug]);
         };
 
         $categoryUrl = function ($category) {

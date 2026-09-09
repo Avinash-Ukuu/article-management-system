@@ -27,7 +27,7 @@ class ContentRequest extends FormRequest
             'content_type'  => ['required', Rule::in(['blog','article','quote',]),],
             'title'         => ['required','string','max:255',],
             'slug'          => ['nullable', 'string', 'max:255', Rule::unique('contents', 'slug')->ignore($this->route('content')),],
-            'category_id'   => ['nullable','integer','exists:categories,id',],
+            'category_id'   => ['required','integer','exists:categories,id',],
             'tags'          => ['nullable','array',],
             'tags.*'        => ['integer','exists:tags,id',],
             'excerpt'       => ['nullable','string','max:1000',],

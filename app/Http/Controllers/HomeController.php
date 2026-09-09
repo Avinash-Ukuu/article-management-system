@@ -19,12 +19,16 @@ class HomeController extends Controller
             ->where('content_type', 'quote')
             ->select([
                 'id',
+                'category_id',
                 'title',
                 'slug',
                 'excerpt',
                 'featured_image',
                 'quote_author',
                 'published_at',
+            ])->with([
+                'author:id,name',
+                'category:id,name,slug',
             ])->latest('published_at')->limit(5)->get();
 
         $trendingPosts = Content::query()
@@ -140,9 +144,13 @@ class HomeController extends Controller
     }
 
 
-    public function show(string $slug)
+    public function show(string $categorySlug, string $contentSlug)
     {
-        $content = Content::query()->published()->where('slug', $slug)
+        $content = Content::query()->published()->where('slug', $contentSlug)
+            ->whereHas('category', function ($query) use ($categorySlug) {
+                $query->where('slug', $categorySlug)
+                    ->where('status', true);
+            })
             ->with([
                 'category:id,name,slug',
                 'author:id,name',
@@ -175,79 +183,60 @@ class HomeController extends Controller
             ]);
 
 
-        $latestPosts = Cache::remember(
-            'frontend.sidebar.latest_posts',
-            now()->addMinutes(10),
-            function () {
-
-                return Content::query()
-                    ->published()
-                    ->with([
-                        'author:id,name',
-                    ])
-                    ->latest('published_at')
-                    ->limit(4)
-                    ->get([
-                        'id',
-                        'author_id',
-                        'title',
-                        'slug',
-                        'featured_image',
-                        'published_at',
-                    ]);
-            }
-        );
+        $latestPosts = Content::query()
+            ->published()
+            ->with([
+                'author:id,name',
+                'category:id,name,slug',
+            ])
+            ->latest('published_at')
+            ->limit(4)
+            ->get([
+                'id',
+                'category_id',
+                'author_id',
+                'title',
+                'slug',
+                'featured_image',
+                'published_at',
+            ]);
 
 
-        $popularPosts = Cache::remember(
-            'frontend.sidebar.popular_posts',
-            now()->addMinutes(10),
-            function () {
 
-                return Content::query()
-                    ->published()
-                    ->with([
-                        'category:id,name,slug',
-                    ])
-                    ->orderByDesc('views_count')
-                    ->limit(5)
-                    ->get([
-                        'id',
-                        'category_id',
-                        'title',
-                        'slug',
-                        'featured_image',
-                        'views_count',
-                        'published_at',
-                    ]);
-            }
-        );
-
-        $sidebarTags = Cache::remember(
-            'frontend.sidebar.tags',
-            now()->addMinutes(30),
-            function () {
-
-                return Tag::query()
-                    ->whereHas('contents', function ($query) {
-                        $query->published();
-                    })
-                    ->withCount([
-                        'contents as published_contents_count' => function ($query) {
-                            $query->published();
-                        }
-                    ])
-                    ->orderByDesc('published_contents_count')
-                    ->limit(20)
-                    ->get([
-                        'id',
-                        'name',
-                        'slug',
-                    ]);
-            }
-        );
+        $popularPosts =  Content::query()
+            ->published()
+            ->with([
+                'category:id,name,slug',
+            ])
+            ->orderByDesc('views_count')
+            ->limit(5)
+            ->get([
+                'id',
+                'category_id',
+                'title',
+                'slug',
+                'featured_image',
+                'views_count',
+                'published_at',
+            ]);
 
 
+        $sidebarTags = Tag::query()
+            ->whereHas('contents', function ($query) {
+                $query->published();
+            })
+            ->withCount([
+                'contents as published_contents_count' => function ($query) {
+                    $query->published();
+                }
+            ])
+            ->orderByDesc('published_contents_count')
+            ->limit(20)
+            ->get([
+                'id',
+                'name',
+                'slug',
+            ]);
 
         return view('frontend.detail', compact(
             'content',
@@ -262,30 +251,30 @@ class HomeController extends Controller
     {
         $search = trim($request->input('q', ''));
         $posts  = Content::query()->published()->when($search !== '', function ($query) use ($search) {
-                                $query->where(function ($query) use ($search) {
-                                    $query
-                                        ->where('title', 'like', "%{$search}%")
-                                        ->orWhere('excerpt', 'like', "%{$search}%")
-                                        ->orWhere('content', 'like', "%{$search}%");
-                                });
-                            })->with([
-                                'category:id,name,slug',
-                                'author:id,name',
-                            ])
-                            ->select([
-                                'id',
-                                'category_id',
-                                'title',
-                                'slug',
-                                'excerpt',
-                                'featured_image',
-                                'author_id',
-                                'published_at',
-                                'views_count',
-                            ])
-                            ->latest('published_at')
-                            ->paginate(12)
-                            ->withQueryString();
+            $query->where(function ($query) use ($search) {
+                $query
+                    ->where('title', 'like', "%{$search}%")
+                    ->orWhere('excerpt', 'like', "%{$search}%")
+                    ->orWhere('content', 'like', "%{$search}%");
+            });
+        })->with([
+            'category:id,name,slug',
+            'author:id,name',
+        ])
+            ->select([
+                'id',
+                'category_id',
+                'title',
+                'slug',
+                'excerpt',
+                'featured_image',
+                'author_id',
+                'published_at',
+                'views_count',
+            ])
+            ->latest('published_at')
+            ->paginate(12)
+            ->withQueryString();
 
         return view('frontend.results', [
             'posts' => $posts,
@@ -302,25 +291,25 @@ class HomeController extends Controller
         $category   = Category::query()->where('slug', $slug)->where('status', true)->firstOrFail();
 
         $posts      = Content::query()->published()
-                        ->where('content_type', '!=', 'quote')
-                        ->where('category_id', $category->id)
-                        ->with([
-                            'category:id,name,slug',
-                            'author:id,name',
-                        ])
-                        ->select([
-                            'id',
-                            'category_id',
-                            'title',
-                            'slug',
-                            'excerpt',
-                            'featured_image',
-                            'author_id',
-                            'published_at',
-                            'views_count',
-                        ])
-                        ->latest('published_at')
-                        ->paginate(12);
+            ->where('content_type', '!=', 'quote')
+            ->where('category_id', $category->id)
+            ->with([
+                'category:id,name,slug',
+                'author:id,name',
+            ])
+            ->select([
+                'id',
+                'category_id',
+                'title',
+                'slug',
+                'excerpt',
+                'featured_image',
+                'author_id',
+                'published_at',
+                'views_count',
+            ])
+            ->latest('published_at')
+            ->paginate(12);
 
         return view('frontend.results', [
             'posts' => $posts,
@@ -369,11 +358,11 @@ class HomeController extends Controller
     public function categories()
     {
         $categories = Category::query()->activeOrdered()->withCount([
-                'contents as published_contents_count' => function ($query) {
-                    $query->published()
-                        ->where('content_type', '!=', 'quote');
-                }
-            ])
+            'contents as published_contents_count' => function ($query) {
+                $query->published()
+                    ->where('content_type', '!=', 'quote');
+            }
+        ])
             ->orderBy('position')
             ->orderBy('id')
             ->get([

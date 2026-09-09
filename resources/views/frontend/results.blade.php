@@ -3,7 +3,7 @@
     @php
         $defaultImage = asset('assets/frontend/images/newsimage8.png');
     @endphp
-    <div class="container">
+    <div class="container mt-3">
         <div class="row">
             <div class="col-lg-12">
                 <div class="section-title">
@@ -46,7 +46,7 @@
                     <article class="news-post mb-4">
                         <div class="row">
                             <div class="col-md-4">
-                                <a href="{{ route('content.show', $post->slug) }}">
+                                <a href="{{ route('content.show', [ 'category' => $post->category->slug,'slug' => $post->slug,]) }}">
                                     <img src="{{ $image }}" alt="{{ $post->title }}" class="img-fluid"
                                         loading="lazy">
                                 </a>
@@ -62,7 +62,7 @@
                                 @endif
 
                                 <h2 class="post-title">
-                                    <a href="{{ route('content.show', $post->slug) }}">
+                                    <a href="{{ route('content.show', [ 'category' => $post->category->slug,'slug' => $post->slug,]) }}">
                                         {{ $post->title }}
                                     </a>
                                 </h2>
@@ -157,14 +157,14 @@
                             <div class="sidebar-post mb-3">
                                 <div class="row">
                                     <div class="col-4">
-                                        <a href="{{ route('content.show', $latest->slug) }}">
+                                        <a href="{{ route('content.show', [ 'category' => $latest->category->slug,'slug' => $latest->slug,]) }}">
                                             <img src="{{ $latestImage }}" alt="{{ $latest->title }}" class="img-fluid"
                                                 loading="lazy">
                                         </a>
                                     </div>
                                     <div class="col-8">
                                         <h4>
-                                            <a href="{{ route('content.show', $latest->slug) }}">
+                                            <a href="{{ route('content.show', [ 'category' => $latest->category->slug,'slug' => $latest->slug,]) }}">
                                                 {{ $latest->title }}
                                             </a>
                                         </h4>
