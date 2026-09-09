@@ -5,9 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Content;
 use App\Models\Tag;
-use App\Models\User;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
@@ -257,5 +256,139 @@ class HomeController extends Controller
             'popularPosts',
             'sidebarTags'
         ));
+    }
+
+    public function search(Request $request)
+    {
+        $search = trim($request->input('q', ''));
+        $posts  = Content::query()->published()->when($search !== '', function ($query) use ($search) {
+                                $query->where(function ($query) use ($search) {
+                                    $query
+                                        ->where('title', 'like', "%{$search}%")
+                                        ->orWhere('excerpt', 'like', "%{$search}%")
+                                        ->orWhere('content', 'like', "%{$search}%");
+                                });
+                            })->with([
+                                'category:id,name,slug',
+                                'author:id,name',
+                            ])
+                            ->select([
+                                'id',
+                                'category_id',
+                                'title',
+                                'slug',
+                                'excerpt',
+                                'featured_image',
+                                'author_id',
+                                'published_at',
+                                'views_count',
+                            ])
+                            ->latest('published_at')
+                            ->paginate(12)
+                            ->withQueryString();
+
+        return view('frontend.results', [
+            'posts' => $posts,
+            'title' => $search !== ''
+                ? 'Search Results for "' . $search . '"'
+                : 'Search Results',
+            'type' => 'search',
+            'search' => $search,
+        ]);
+    }
+
+    public function category(string $slug)
+    {
+        $category   = Category::query()->where('slug', $slug)->where('status', true)->firstOrFail();
+
+        $posts      = Content::query()->published()
+                        ->where('content_type', '!=', 'quote')
+                        ->where('category_id', $category->id)
+                        ->with([
+                            'category:id,name,slug',
+                            'author:id,name',
+                        ])
+                        ->select([
+                            'id',
+                            'category_id',
+                            'title',
+                            'slug',
+                            'excerpt',
+                            'featured_image',
+                            'author_id',
+                            'published_at',
+                            'views_count',
+                        ])
+                        ->latest('published_at')
+                        ->paginate(12);
+
+        return view('frontend.results', [
+            'posts' => $posts,
+            'title' => $category->name,
+            'type' => 'category',
+            'category' => $category,
+            'search' => null,
+        ]);
+    }
+
+    public function tag(string $slug)
+    {
+        $tag    =   Tag::query()->where('slug', $slug)->firstOrFail();
+
+        $posts = Content::query()->published()->where('content_type', '!=', 'quote')
+            ->whereHas('tags', function ($query) use ($tag) {
+                $query->where('tags.id', $tag->id);
+            })
+            ->with([
+                'category:id,name,slug',
+                'author:id,name',
+            ])
+            ->select([
+                'id',
+                'category_id',
+                'title',
+                'slug',
+                'excerpt',
+                'featured_image',
+                'author_id',
+                'published_at',
+                'views_count',
+            ])
+            ->latest('published_at')
+            ->paginate(12);
+
+        return view('frontend.results', [
+            'posts' => $posts,
+            'title' => $tag->name,
+            'type' => 'tag',
+            'tag' => $tag,
+            'search' => null,
+        ]);
+    }
+
+    public function categories()
+    {
+        $categories = Category::query()->activeOrdered()->withCount([
+                'contents as published_contents_count' => function ($query) {
+                    $query->published()
+                        ->where('content_type', '!=', 'quote');
+                }
+            ])
+            ->orderBy('position')
+            ->orderBy('id')
+            ->get([
+                'id',
+                'name',
+                'slug',
+                'description',
+                'position',
+            ]);
+
+        return view('frontend.categories', compact('categories'));
+    }
+
+    public function about()
+    {
+        return view('frontend.about');
     }
 }

@@ -36,11 +36,13 @@
                                 Home
                             </a>
                         </li>
-                        <li class="breadcrumbs__item">
-                            <a class="breadcrumbs__url" href="{{ route('category.show', $content->category->slug) }}">
-                                {{ $content->category->name }}
-                            </a>
-                        </li>
+                        @if(!empty($content->category))
+                            <li class="breadcrumbs__item">
+                                <a class="breadcrumbs__url" href="{{ route('category.show', $content->category->slug) }}">
+                                    {{ $content->category->name }}
+                                </a>
+                            </li>
+                        @endif
                         <li class="breadcrumbs__item breadcrumbs__item--current">
                             {{ $content->title }}
                         </li>
@@ -91,14 +93,16 @@
                                 </li>
 
                                 {{-- Category --}}
-                                <li class="list-inline-item">
-                                    <span class="text-dark text-capitalize">
-                                        in
-                                    </span>
-                                    <a href="{{ route('category.show', $content->category->slug) }}">
-                                        {{ $content->category->name }}
-                                    </a>
-                                </li>
+                                @if(!empty($content->category))
+                                    <li class="list-inline-item">
+                                        <span class="text-dark text-capitalize">
+                                            in
+                                        </span>
+                                        <a href="{{ route('category.show', $content->category->slug) }}">
+                                            {{ $content->category->name }}
+                                        </a>
+                                    </li>
+                                @endif
                             </ul>
                         </div>
 
@@ -299,12 +303,12 @@
                         <aside class="wrapper__list__article">
                             <div class="mb-4">
                                 <div class="widget__form-search-bar">
-                                    <form action="#" method="GET">
+                                    <form action="{{ route('search') }}" method="GET">
                                         <div class="row no-gutters">
                                             <div class="col">
                                                 <input type="text" name="q"
                                                     class="form-control border-secondary border-right-0 rounded-0"
-                                                    placeholder="Search" value="{{ request('q') }}">
+                                                    placeholder="Search" value="{{ request('q') }}" type="search" name="q">
 
                                             </div>
                                             <div class="col-auto">
@@ -383,7 +387,7 @@
                                             <div class="image-sm">
                                                 <a href="{{ route('content.show', $popular->slug) }}">
                                                     @if ($popular->featured_image)
-                                                        <img src="{{ asset('storage/' . $popular->featured_image) }}"
+                                                        <img src="{{ asset('uploads/contents/' . $popular->featured_image) }}"
                                                             class="img-fluid" alt="{{ $popular->title }}"
                                                             loading="lazy">
                                                     @endif

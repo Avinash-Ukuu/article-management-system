@@ -3,25 +3,15 @@
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/',             [HomeController::class,'home'])->name('home');
+Route::get('/',                 [HomeController::class,'home'])->name('home');
+Route::get('/search',           [HomeController::class, 'search'])->name('search');
+Route::get('/category/{slug}',  [HomeController::class, 'category'])->name('category.show');
+Route::get('/tag/{slug}',       [HomeController::class, 'tag'])->name('tag.show');
+Route::get('/categories',       [HomeController::class, 'categories'])->name('categories');
+Route::get('/about',            [HomeController::class, 'about'])->name('about');
 
-Route::get('/category/{slug}', function(){
-    dd('hi');
-    })->name('category.show');
-Route::get('/tag/{slug}', function(){
-    dd('hi');
-    })->name('tag.show');
+Route::get('article/{slug}',    [HomeController::class, 'show'])->name('content.show');
 
-
-Route::get('/{slug}',       [HomeController::class, 'show'])->name('content.show');
-
-
-// Route::get('/test-home', function () {
-//     return view('frontend.test.testHome');
-// });
-Route::get('/test-detail', function () {
-    return view('frontend.test.testDetail');
-});
 
 
 require __DIR__.'/auth.php';

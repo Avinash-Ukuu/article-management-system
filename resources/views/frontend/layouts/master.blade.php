@@ -95,9 +95,9 @@
                     </div>
                     <div class="col-sm-12 col-md-7">
                         <div class="list-unstyled topbar-right">
-                            <ul class="topbar-link">
+                            {{-- <ul class="topbar-link">
                                 <li><a href="#" title="">Contact Us</a></li>
-                            </ul>
+                            </ul> --}}
                             <ul class="topbar-sosmed">
                                 <li>
                                     <a href="#"><i class="fa fa-facebook"></i></a>
@@ -126,7 +126,7 @@
                         </div>
                     </div>
                     <figure class="mb-0 mx-auto">
-                        <a href="/homepage-v1">
+                        <a href="{{ route('home') }}">
                             <img src="{{ asset('assets/frontend/images/logo1.png') }}" alt=""
                                 class="img-fluid logo">
                         </a>
@@ -137,237 +137,12 @@
                                 <a class="nav-link active" href="{{ route('home') }}"> Home
                                 </a>
                             </li>
-                            {{-- <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"> Pages </a>
-                                <ul class="dropdown-menu animate fade-up">
-
-                                    <li><a class="dropdown-item icon-arrow" href="#"> Blog </a>
-                                        <ul class="submenu dropdown-menu  animate fade-up">
-                                            <li><a class="dropdown-item" href="/category-style-v1">Style 1</a></li>
-                                            <li><a class="dropdown-item" href="/category-style-v2">Style 2</a></li>
-                                            <li><a class="dropdown-item" href="/category-style-v3">Style 3</a></li>
-
-                                            <li><a class="dropdown-item icon-arrow" href="">Submenu item 3 </a>
-                                                <ul class="submenu dropdown-menu  animate fade-up">
-                                                    <li><a class="dropdown-item" href="">Multi level 1</a></li>
-                                                    <li><a class="dropdown-item" href="">Multi level 2</a></li>
-                                                </ul>
-                                            </li>
-                                            <li><a class="dropdown-item" href="">Submenu item 4</a></li>
-                                            <li><a class="dropdown-item" href="">Submenu item 5</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a class="dropdown-item icon-arrow" href="#"> Blog single detail </a>
-                                        <ul class="submenu dropdown-menu  animate fade-up">
-                                            <li><a class="dropdown-item" href="/article-detail-v1">Style 1</a></li>
-                                            <li><a class="dropdown-item" href="/article-detail-v2">Style 2</a></li>
-                                            <li><a class="dropdown-item" href="/article-detail-v3">Style 3</a></li>
-
-                                        </ul>
-                                    </li>
-
-                                    <li><a class="dropdown-item icon-arrow" href="#"> Search Result </a>
-                                        <ul class="submenu dropdown-menu  animate fade-up">
-                                            <li><a class="dropdown-item" href="/search-result">Style 1</a></li>
-                                            <li><a class="dropdown-item" href="/search-result-v1">Style 2</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a class="dropdown-item" href="/login">Login </a>
-                                    </li>
-                                    <li><a class="dropdown-item" href="/register"> Register </a>
-                                    </li>
-                                    <li><a class="dropdown-item" href="/contact"> Contact </a>
-                                    </li>
-                                    <li><a class="dropdown-item" href="/404"> 404 Error </a>
-                                    </li>
-                                </ul>
-                            </li> --}}
-
                             <li class="nav-item dropdown">
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" href="{{ route('about') }}">
                                     About </a>
                             </li>
-
-                            {{-- <li class="nav-item dropdown has-megamenu">
-                                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"> News </a>
-                                <div class="dropdown-menu animate fade-down megamenu mx-auto" role="menu">
-                                    <div class="container wrap__mobile-megamenu">
-                                        <div class="col-megamenu">
-                                            <h5 class="title">Recent news</h5>
-                                            <hr>
-                                            <!-- Popular news carousel -->
-                                            <div class="popular__news-header-carousel">
-
-                                                <div class="top__news__slider">
-                                                    <div class="item">
-                                                        <!-- Post Article -->
-                                                        <div class="article__entry">
-                                                            <div class="article__image">
-                                                                <a href="#">
-                                                                    <img src="{{ asset('assets/frontend/images/newsimage3.png') }}"
-                                                                        alt="" class="img-fluid">
-                                                                </a>
-                                                            </div>
-                                                            <div class="article__content">
-                                                                <ul class="list-inline">
-                                                                    <li class="list-inline-item">
-                                                                        <span class="text-primary">
-                                                                            by david hall
-                                                                        </span>,
-                                                                    </li>
-
-                                                                    <li class="list-inline-item">
-                                                                        <span>
-                                                                            descember 09, 2020
-                                                                        </span>
-                                                                    </li>
-                                                                </ul>
-                                                                <h5>
-                                                                    <a href="#">
-                                                                        Proin eu nisl et arcu iaculis placerat
-                                                                        sollicitudin ut est.
-                                                                    </a>
-                                                                </h5>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="item">
-                                                        <!-- Post Article -->
-                                                        <div class="article__entry">
-                                                            <div class="article__image">
-                                                                <a href="#">
-                                                                    <img src="{{ asset('assets/frontend/images/newsimage4.png') }}"
-                                                                        alt="" class="img-fluid">
-                                                                </a>
-                                                            </div>
-                                                            <div class="article__content">
-                                                                <ul class="list-inline">
-                                                                    <li class="list-inline-item">
-                                                                        <span class="text-primary">
-                                                                            by david hall
-                                                                        </span>,
-                                                                    </li>
-
-                                                                    <li class="list-inline-item">
-                                                                        <span>
-                                                                            descember 09, 2020
-                                                                        </span>
-                                                                    </li>
-                                                                </ul>
-                                                                <h5>
-                                                                    <a href="#">
-                                                                        Demonstration we already have the best deal
-                                                                    </a>
-                                                                </h5>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="item">
-                                                        <!-- Post Article -->
-                                                        <div class="article__entry">
-                                                            <div class="article__image">
-                                                                <a href="#">
-                                                                    <img src="{{ asset('assets/frontend/images/newsimage5.png') }}"
-                                                                        alt="" class="img-fluid">
-                                                                </a>
-                                                            </div>
-                                                            <div class="article__content">
-                                                                <ul class="list-inline">
-                                                                    <li class="list-inline-item">
-                                                                        <span class="text-primary">
-                                                                            by david hall
-                                                                        </span>,
-                                                                    </li>
-
-                                                                    <li class="list-inline-item">
-                                                                        <span>
-                                                                            descember 09, 2020
-                                                                        </span>
-                                                                    </li>
-                                                                </ul>
-                                                                <h5>
-                                                                    <a href="#">
-                                                                        formula one have best deal winner sponsor power
-                                                                        drink
-                                                                    </a>
-                                                                </h5>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="item">
-                                                        <!-- Post Article -->
-                                                        <div class="article__entry">
-                                                            <div class="article__image">
-                                                                <a href="#">
-                                                                    <img src="{{ asset('assets/frontend/images/newsimage6.png') }}"
-                                                                        alt="" class="img-fluid">
-                                                                </a>
-                                                            </div>
-                                                            <div class="article__content">
-                                                                <ul class="list-inline">
-                                                                    <li class="list-inline-item">
-                                                                        <span class="text-primary">
-                                                                            by david hall
-                                                                        </span>,
-                                                                    </li>
-
-                                                                    <li class="list-inline-item">
-                                                                        <span>
-                                                                            descember 09, 2020
-                                                                        </span>
-                                                                    </li>
-                                                                </ul>
-                                                                <h5>
-                                                                    <a href="#">
-                                                                        many flag have a spirit freedom placerat
-                                                                        sollicitudin ut est.
-                                                                    </a>
-                                                                </h5>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="item">
-                                                        <!-- Post Article -->
-                                                        <div class="article__entry">
-                                                            <div class="article__image">
-                                                                <a href="#">
-                                                                    <img src="{{ asset('assets/frontend/images/newsimage7.png') }}"
-                                                                        alt="" class="img-fluid">
-                                                                </a>
-                                                            </div>
-                                                            <div class="article__content">
-                                                                <ul class="list-inline">
-                                                                    <li class="list-inline-item">
-                                                                        <span class="text-primary">
-                                                                            by david hall
-                                                                        </span>,
-                                                                    </li>
-
-                                                                    <li class="list-inline-item">
-                                                                        <span>
-                                                                            descember 09, 2020
-                                                                        </span>
-                                                                    </li>
-                                                                </ul>
-                                                                <h5>
-                                                                    <a href="#">
-                                                                        Proin eu nisl et arcu iaculis placerat
-                                                                        sollicitudin ut est.
-                                                                    </a>
-                                                                </h5>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-
-                                            </div>
-                                        </div> <!-- col-megamenu.// -->
-                                    </div>
-                                </div> <!-- dropdown-mega-menu.// -->
-                            </li> --}}
-                            <li class="nav-item"><a class="nav-link" href="#"> Category </a></li>
-                            <li class="nav-item"><a class="nav-link" href="#"> contact </a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('categories') }}"> Category </a></li>
+                            {{-- <li class="nav-item"><a class="nav-link" href="#"> contact </a></li> --}}
                         </ul>
 
 
@@ -382,19 +157,19 @@
                         <div class="top-search navigation-shadow">
                             <div class="container">
                                 <div class="input-group ">
-                                    <form action="#">
+                                    <form action="{{ route('search') }}" method="GET">
 
                                         <div class="row no-gutters mt-3">
                                             <div class="col">
                                                 <input class="form-control border-secondary border-right-0 rounded-0"
-                                                    type="search" value="" placeholder="Search "
+                                                    type="search" value="{{ request('q') }}" name="q" placeholder="Search "
                                                     id="example-search-input4">
                                             </div>
                                             <div class="col-auto">
-                                                <a class="btn btn-outline-secondary border-left-0 rounded-0 rounded-right"
-                                                    href="/search-result">
+                                                <button class="btn btn-outline-secondary border-left-0 rounded-0 rounded-right"
+                                                    type="submit">
                                                     <i class="fa fa-search"></i>
-                                                </a>
+                                            </button>
                                             </div>
                                         </div>
 
@@ -415,17 +190,19 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <div class="widget__form-search-bar  ">
-                            <div class="row no-gutters">
-                                <div class="col">
-                                    <input class="form-control border-secondary border-right-0 rounded-0"
-                                        value="" placeholder="Search">
+                            <form action="{{ route('search') }}" method="GET">
+                                <div class="row no-gutters">
+                                    <div class="col">
+                                        <input class="form-control border-secondary border-right-0 rounded-0"
+                                            type="search" value="{{ request('q') }}" name="q" placeholder="Search">
+                                    </div>
+                                    <div class="col-auto">
+                                        <button class="btn btn-outline-secondary border-left-0 rounded-0 rounded-right"  type="submit">
+                                            <i class="fa fa-search"></i>
+                                        </button>
+                                    </div>
                                 </div>
-                                <div class="col-auto">
-                                    <button class="btn btn-outline-secondary border-left-0 rounded-0 rounded-right">
-                                        <i class="fa fa-search"></i>
-                                    </button>
-                                </div>
-                            </div>
+                            </form>
                         </div>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
@@ -441,15 +218,15 @@
 
 
                                 <li class="nav-item dropdown">
-                                    <a class="nav-link text-dark" href="#"> About
+                                    <a class="nav-link text-dark" href="{{ route('about') }}"> About
                                     </a>
                                 </li>
 
 
-                                <li class="nav-item"><a class="nav-link  text-dark" href="#"> Category </a>
+                                <li class="nav-item"><a class="nav-link  text-dark" href="{{ route('categories') }}"> Category </a>
                                 </li>
-                                <li class="nav-item"><a class="nav-link  text-dark" href="#"> contact </a>
-                                </li>
+                                {{-- <li class="nav-item"><a class="nav-link  text-dark" href="#"> contact </a>
+                                </li> --}}
                             </ul>
 
                         </nav>
