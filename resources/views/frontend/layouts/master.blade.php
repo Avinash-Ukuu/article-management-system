@@ -122,12 +122,12 @@
                 <div class="container">
                     <div class="offcanvas-header">
                         <div data-toggle="modal" data-target="#modal_aside_right" class="btn-md">
-                            <span class="navbar-toggler-icon"></span>
+                            <span class="fa fa-align-justify"></span>
                         </div>
                     </div>
                     <figure class="mb-0 mx-auto">
                         <a href="{{ route('home') }}">
-                            <img src="{{ asset('assets/frontend/images/logo1.png') }}" alt=""
+                            <img style="height: auto; width: 200px;" src="{{ asset('assets/frontend/images/logo.png') }}" alt=""
                                 class="img-fluid logo">
                         </a>
                     </figure>

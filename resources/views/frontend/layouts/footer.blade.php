@@ -137,7 +137,7 @@
                          <div class="row">
                              <div class="col-md-4">
                                  <figure class="image-logo">
-                                     <img src="{{ asset('assets/frontend/images/logo2.png') }}" alt=""
+                                     <img src="{{ asset('assets/frontend/images/logo_with_white.png') }}" alt=""
                                          class="logo-footer">
                                  </figure>
                              </div>
