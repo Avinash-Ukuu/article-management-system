@@ -5,110 +5,103 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Content;
 use App\Models\Tag;
-use Illuminate\Support\Facades\Cache;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 
 class HomeController extends Controller
 {
     public function home()
     {
+        $postSelect     = [
+                            'id',
+                            'category_id',
+                            'title',
+                            'slug',
+                            'excerpt',
+                            'featured_image',
+                            'author_id',
+                            'published_at',
+                            'views_count',
+                        ];
 
-        // Quotes
-        $quotes = Content::query()
-            ->published()
-            ->where('content_type', 'quote')
-            ->select([
-                'id',
-                'category_id',
-                'title',
-                'slug',
-                'excerpt',
-                'featured_image',
-                'quote_author',
-                'published_at',
-            ])->with([
-                'author:id,name',
-                'category:id,name,slug',
-            ])->latest('published_at')->limit(5)->get();
+        $trendingPosts  = Content::query()->published()->where('content_type', '!=', 'quote')
+                            ->select($postSelect)->with([
+                                'author:id,name',
+                                'category:id,name,slug',
+                            ])
+                            ->latest('published_at')
+                            ->latest('id')
+                            ->limit(5)
+                            ->get();
 
-        $trendingPosts = Content::query()
-            ->published()
-            ->where('content_type', '!=', 'quote')
-            ->select([
-                'id',
-                'category_id',
-                'title',
-                'slug',
-                'excerpt',
-                'featured_image',
-                'author_id',
-                'published_at',
-                'views_count',
-            ])
-            ->with([
-                'author:id,name',
-                'category:id,name,slug',
-            ])
-            ->latest('published_at')
-            ->limit(5)
-            ->get();
 
-        $popularPosts = Content::query()
-            ->published()
-            ->where('content_type', '!=', 'quote')
-            ->select([
-                'id',
-                'category_id',
-                'title',
-                'slug',
-                'excerpt',
-                'featured_image',
-                'author_id',
-                'published_at',
-                'views_count',
-            ])
-            ->with([
-                'author:id,name',
-                'category:id,name,slug',
-            ])
-            ->orderByDesc('views_count')
-            ->limit(5)
-            ->get();
+        $bannerPostIds  = $trendingPosts->pluck('id');
 
-        $categories = Category::query()
-            ->activeOrdered()
-            ->get([
-                'id',
-                'name',
-                'slug',
-                'position',
-            ]);
+        $popularPosts   = Content::query()->published()
+                            ->where('content_type', '!=', 'quote')
+                            ->where('is_featured', true)
+                            ->when(
+                                $bannerPostIds->isNotEmpty(),
+                                function ($query) use ($bannerPostIds) {
+                                    $query->whereNotIn('id', $bannerPostIds);
+                                }
+                            )
+                            ->select($postSelect)
+                            ->with([
+                                'author:id,name',
+                                'category:id,name,slug',
+                            ])
+                            ->orderByDesc('views_count')
+                            ->latest('published_at')
+                            ->latest('id')
+                            ->limit(15)
+                            ->get();
+
+        $excludedPostIds = $bannerPostIds
+                            ->merge($popularPosts->pluck('id'))
+                            ->unique()
+                            ->values();
+
+        $categories     = Category::query()->activeOrdered()
+                            ->where('slug', '!=', 'quote')
+                            ->whereHas('contents', function ($query) {
+                                $query
+                                    ->published()
+                                    ->where('content_type', '!=', 'quote');
+                            })
+                            ->get([
+                                'id',
+                                'name',
+                                'slug',
+                                'position',
+                            ]);
 
 
         $categoryIds = $categories->pluck('id');
+        $categoryPosts = collect();
 
-        $categoryPosts = Content::query()
-            ->published()
-            ->whereIn('category_id', $categoryIds)
-            ->where('content_type', '!=', 'quote')
-            ->select([
-                'id',
-                'category_id',
-                'title',
-                'slug',
-                'excerpt',
-                'featured_image',
-                'author_id',
-                'published_at',
-                'views_count',
-            ])
-            ->with([
-                'author:id,name',
-                'category:id,name,slug',
-            ])
-            ->latest('published_at')
-            ->get()
-            ->groupBy('category_id');
+        if ($categoryIds->isNotEmpty()) {
+
+            $categoryPosts = Content::query()
+                ->published()
+                ->whereIn('category_id', $categoryIds)
+                ->where('content_type', '!=', 'quote')
+                ->when(
+                    $excludedPostIds->isNotEmpty(),
+                    function ($query) use ($excludedPostIds) {
+                        $query->whereNotIn('id', $excludedPostIds);
+                    }
+                )
+                ->select($postSelect)
+                ->with([
+                    'author:id,name',
+                ])
+                ->latest('published_at')
+                ->latest('id')
+                ->get()
+                ->groupBy('category_id');
+        }
 
         $categories->each(function ($category) use ($categoryPosts) {
 
@@ -118,21 +111,56 @@ class HomeController extends Controller
                 ->values();
         });
 
+        $quoteCategory = Category::query()
+            ->where('slug', 'quote')
+            ->where('status', true)
+            ->first();
+
+        $quotes = collect();
+
+        if ($quoteCategory) {
+
+            $quotes = Content::query()
+                ->published()
+                ->where('category_id', $quoteCategory->id)
+                ->where('content_type', 'quote')
+                ->select([
+                    'id',
+                    'category_id',
+                    'title',
+                    'slug',
+                    'excerpt',
+                    'featured_image',
+                    'quote_author',
+                    'published_at',
+                ])
+                ->with([
+                    'category:id,name,slug',
+                ])
+                ->latest('published_at')
+                ->latest('id')
+                ->limit(5)
+                ->get();
+        }
+
+
         $tags = Tag::query()
             ->select([
                 'tags.id',
                 'tags.name',
                 'tags.slug',
-            ])->whereHas('contents', function ($query) {
+            ])
+            ->whereHas('contents', function ($query) {
                 $query->published();
-            })->withCount([
+            })
+            ->withCount([
                 'contents as published_contents_count' => function ($query) {
                     $query->published();
                 }
-            ])->orderByDesc('published_contents_count')
+            ])
+            ->orderByDesc('published_contents_count')
             ->limit(15)
             ->get();
-
 
         return view('frontend.home', compact(
             'quotes',
@@ -208,6 +236,7 @@ class HomeController extends Controller
             ->with([
                 'category:id,name,slug',
             ])
+            ->where('is_featured', true)
             ->orderByDesc('views_count')
             ->limit(5)
             ->get([
@@ -379,5 +408,44 @@ class HomeController extends Controller
     public function about()
     {
         return view('frontend.about');
+    }
+
+    public function sitemap()
+    {
+        $urls = [
+            ['loc' => url('/'), 'lastmod' => Carbon::now()->toAtomString(), 'priority' => '1.0'],
+            ['loc' => url('/courses'), 'lastmod' => Carbon::now()->toAtomString(), 'priority' => '0.9'],
+            ['loc' => url('/blogs'), 'lastmod' => Carbon::now()->toAtomString(), 'priority' => '0.8'],
+            ['loc' => url('/contact'), 'lastmod' => Carbon::now()->toAtomString(), 'priority' => '0.6'],
+            ['loc' => url('/gallery'), 'lastmod' => Carbon::now()->toAtomString(), 'priority' => '0.5'],
+            ['loc' => url('/verification'), 'lastmod' => Carbon::now()->toAtomString(), 'priority' => '0.4'],
+            ['loc' => url('/ppc-course-in-jalandhar'), 'lastmod' => Carbon::now()->toAtomString(), 'priority' => '0.7'],
+            ['loc' => url('/seo-course-in-jalandhar'), 'lastmod' => Carbon::now()->toAtomString(), 'priority' => '0.7'],
+            ['loc' => url('/smm-course-in-jalandhar'), 'lastmod' => Carbon::now()->toAtomString(), 'priority' => '0.7'],
+        ];
+
+        // // Get all blogs
+        // $blogs = Blog::where('publish_type','publish')->latest()->get();
+        // foreach ($blogs as $blog) {
+        //     $urls[] = [
+        //         'loc' => url('/blog/' . $blog->slug),
+        //         'lastmod' => $blog->updated_at->toAtomString(),
+        //         'priority' => '0.6'
+        //     ];
+        // }
+
+        // $courses = Course::where('is_active', 1)->latest()->get();
+        // foreach ($courses as $course) {
+        //     $urls[] = [
+        //         'loc' => url($course->slug . '-course-in-jalandhar'),
+        //         'lastmod' => $course->updated_at->toAtomString(),
+        //         'priority' => '0.7'
+        //     ];
+        // }
+
+        // // Generate XML
+        $xml = view('sitemap', compact('urls'));
+
+        return Response::make($xml, 200)->header('Content-Type', 'application/xml');
     }
 }

@@ -116,11 +116,8 @@
                                                         </a>
                                                     </h2>
                                                 </div>
-
                                                 <div class="card__post__author-info">
-
                                                     <ul class="list-inline">
-
                                                         @if ($post->author)
                                                             <li class="list-inline-item">
                                                                 <a href="#">
@@ -128,7 +125,6 @@
                                                                 </a>
                                                             </li>
                                                         @endif
-
                                                         @if ($post->published_at)
                                                             <li class="list-inline-item">
                                                                 <span>
@@ -151,35 +147,25 @@
                         <div class="popular__news-right">
                             @foreach ($popularPosts->slice(2, 2) as $post)
                                 <div class="card__post">
-
                                     <div class="card__post__body card__post__transition">
-
                                         <a href="{{ $postUrl($post) }}">
                                             <img src="{{ $imageUrl($post) }}" class="img-fluid" alt="{{ $post->title }}">
                                         </a>
-
                                         <div class="card__post__content bg__post-cover">
-
                                             @if ($post->category)
                                                 <div class="card__post__category">
                                                     {{ $post->category->name }}
                                                 </div>
                                             @endif
-
                                             <div class="card__post__title">
-
                                                 <h5>
                                                     <a href="{{ $postUrl($post) }}">
                                                         {{ $post->title }}
                                                     </a>
                                                 </h5>
-
                                             </div>
-
                                             <div class="card__post__author-info">
-
                                                 <ul class="list-inline">
-
                                                     @if ($post->author)
                                                         <li class="list-inline-item">
                                                             <a href="#">
@@ -195,7 +181,6 @@
                                                             </span>
                                                         </li>
                                                     @endif
-
                                                 </ul>
                                             </div>
                                         </div>
@@ -216,6 +201,9 @@
                     <div class="col-lg-12">
                         <div class="top__news__slider">
                             @foreach ($popularPosts as $post)
+                                @if ($loop->iteration < 5)
+                                    @continue
+                                @endif
                                 <div class="item">
                                     <div class="article__entry">
                                         <div class="article__image">
