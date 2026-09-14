@@ -141,7 +141,7 @@
                                 <a class="nav-link" href="{{ route('about') }}">
                                     About </a>
                             </li>
-                            <li class="nav-item"><a class="nav-link" href="{{ route('categories') }}"> Category </a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('category-list') }}"> Category </a></li>
                             {{-- <li class="nav-item"><a class="nav-link" href="#"> contact </a></li> --}}
                         </ul>
 
@@ -223,7 +223,7 @@
                                 </li>
 
 
-                                <li class="nav-item"><a class="nav-link  text-dark" href="{{ route('categories') }}"> Category </a>
+                                <li class="nav-item"><a class="nav-link  text-dark" href="{{ route('category-list') }}"> Category </a>
                                 </li>
                                 {{-- <li class="nav-item"><a class="nav-link  text-dark" href="#"> contact </a>
                                 </li> --}}
@@ -232,7 +232,7 @@
                         </nav>
                     </div>
                     <div class="modal-footer">
-                        <p>© 2026 <a href="http://www.nastservices.com/"
+                        <p>© 2026 <a href="http://www.nastservices.com/" target="_blank"
                                 title="Premium news">NAST Services</a>
                            .</p>
                     </div>

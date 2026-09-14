@@ -319,7 +319,6 @@ class HomeController extends Controller
         $category   = Category::query()->where('slug', $slug)->where('status', true)->firstOrFail();
 
         $posts      = Content::query()->published()
-            ->where('content_type', '!=', 'quote')
             ->where('category_id', $category->id)
             ->with([
                 'category:id,name,slug',
@@ -387,8 +386,7 @@ class HomeController extends Controller
     {
         $categories = Category::query()->activeOrdered()->withCount([
             'contents as published_contents_count' => function ($query) {
-                $query->published()
-                    ->where('content_type', '!=', 'quote');
+                $query->published();
             }
         ])
             ->orderBy('position')
@@ -411,40 +409,108 @@ class HomeController extends Controller
 
     public function sitemap()
     {
-        $urls = [
-            ['loc' => url('/'), 'lastmod' => Carbon::now()->toAtomString(), 'priority' => '1.0'],
-            ['loc' => url('/courses'), 'lastmod' => Carbon::now()->toAtomString(), 'priority' => '0.9'],
-            ['loc' => url('/blogs'), 'lastmod' => Carbon::now()->toAtomString(), 'priority' => '0.8'],
-            ['loc' => url('/contact'), 'lastmod' => Carbon::now()->toAtomString(), 'priority' => '0.6'],
-            ['loc' => url('/gallery'), 'lastmod' => Carbon::now()->toAtomString(), 'priority' => '0.5'],
-            ['loc' => url('/verification'), 'lastmod' => Carbon::now()->toAtomString(), 'priority' => '0.4'],
-            ['loc' => url('/ppc-course-in-jalandhar'), 'lastmod' => Carbon::now()->toAtomString(), 'priority' => '0.7'],
-            ['loc' => url('/seo-course-in-jalandhar'), 'lastmod' => Carbon::now()->toAtomString(), 'priority' => '0.7'],
-            ['loc' => url('/smm-course-in-jalandhar'), 'lastmod' => Carbon::now()->toAtomString(), 'priority' => '0.7'],
+        $urls = [];
+        $fixedPages = [
+            [
+                'loc' => url('/'),
+                'lastmod' => Carbon::now()->toAtomString(),
+                'priority' => '1.0',
+            ],
+            [
+                'loc' => url('/about'),
+                'lastmod' => Carbon::now()->toAtomString(),
+                'priority' => '0.8',
+            ],
+            [
+                'loc' => url('/categories'),
+                'lastmod' => Carbon::now()->toAtomString(),
+                'priority' => '0.8',
+            ],
         ];
 
-        // // Get all blogs
-        // $blogs = Blog::where('publish_type','publish')->latest()->get();
-        // foreach ($blogs as $blog) {
-        //     $urls[] = [
-        //         'loc' => url('/blog/' . $blog->slug),
-        //         'lastmod' => $blog->updated_at->toAtomString(),
-        //         'priority' => '0.6'
-        //     ];
-        // }
+        $urls = array_merge($urls, $fixedPages);
 
-        // $courses = Course::where('is_active', 1)->latest()->get();
-        // foreach ($courses as $course) {
-        //     $urls[] = [
-        //         'loc' => url($course->slug . '-course-in-jalandhar'),
-        //         'lastmod' => $course->updated_at->toAtomString(),
-        //         'priority' => '0.7'
-        //     ];
-        // }
+        $categories = Category::query()
+            ->where('status', true)
+            ->whereHas('contents', function ($query) {
+                $query->published()
+                    ->where('content_type', '!=', 'quote');
+            })
+            ->orderBy('position')
+            ->orderBy('id')
+            ->get([
+                'id',
+                'name',
+                'slug',
+                'updated_at',
+            ]);
+        foreach ($categories as $category) {
+            $urls[] = [
+                'loc' => route('category.show', $category->slug),
+                'lastmod' => optional($category->updated_at)
+                    ->toAtomString(),
+                'priority' => '0.8',
+            ];
+        }
 
-        // // Generate XML
-        $xml = view('sitemap', compact('urls'));
+        $tags = Tag::query()
+            ->whereHas('contents', function ($query) {
+                $query->published()
+                    ->where('content_type', '!=', 'quote');
+            })
+            ->get([
+                'id',
+                'name',
+                'slug',
+                'updated_at',
+            ]);
 
-        return Response::make($xml, 200)->header('Content-Type', 'application/xml');
+        foreach ($tags as $tag) {
+
+            $urls[] = [
+                'loc' => route('tag.show', $tag->slug),
+                'lastmod' => optional($tag->updated_at)
+                    ->toAtomString(),
+                'priority' => '0.5',
+            ];
+        }
+
+        $contents = Content::query()
+            ->published()
+            ->with([
+                'category:id,name,slug',
+            ])
+            ->whereHas('category', function ($query) {
+                $query->where('status', true);
+            })
+            ->get([
+                'id',
+                'category_id',
+                'slug',
+                'content_type',
+                'updated_at',
+            ]);
+
+        foreach ($contents as $content) {
+            if (!$content->category) {
+                continue;
+            }
+            $urls[] = [
+                'loc' => route('content.show', [
+                    'category' => $content->category->slug,
+                    'slug' => $content->slug,
+                ]),
+                'lastmod' => optional($content->updated_at)
+                    ->toAtomString(),
+                'priority' => $content->content_type === 'quote'
+                    ? '0.5'
+                    : '0.7',
+            ];
+        }
+
+        $xml = view('sitemap', compact('urls'))->render();
+
+        return response($xml, 200)
+            ->header('Content-Type', 'application/xml');
     }
 }

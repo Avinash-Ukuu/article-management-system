@@ -13,7 +13,7 @@
         };
 
         $postUrl = function ($post) {
-            return route('content.show',[ 'category' => $post->category->slug,'slug' => $post->slug]);
+            return route('content.show', ['category' => $post->category->slug, 'slug' => $post->slug]);
         };
 
         $categoryUrl = function ($category) {
@@ -249,167 +249,137 @@
     {{-- END POPULAR NEWS --}}
 
 
-    @foreach ($categories as $category)
-        @php
-            $posts = $category->homepagePosts ?? collect();
-        @endphp
-
-        @if ($posts->isNotEmpty())
-            <section class="{{ $loop->first ? 'pt-0' : 'mt-4' }}">
-                <div class="popular__section-news">
-                    <div class="container">
-                        <div class="row">
-
-                            <div class="col-md-12 col-lg-8">
-                                <aside class="wrapper__list__article mb-0">
-                                    <h4 class="border_section">
-                                        {{ $category->name }}
-                                    </h4>
-
-                                    {{-- FIRST 2 FEATURED POSTS --}}
-                                    <div class="row">
-                                        @foreach ($posts->take(2) as $post)
-                                            <div class="col-sm-12 col-md-6 mb-4">
-                                                <div class="card__post">
-                                                    <div class="card__post__body card__post__transition">
-                                                        <a href="{{ $postUrl($post) }}">
-                                                            <img src="{{ $imageUrl($post) }}" class="img-fluid"
-                                                                alt="{{ $post->title }}" loading="lazy">
-                                                        </a>
-                                                        <div class="card__post__content bg__post-cover">
-                                                            <div class="card__post__category">
-                                                                {{ $category->name }}
-                                                            </div>
-                                                            <div class="card__post__title">
-                                                                <h5>
-                                                                    <a href="{{ $postUrl($post) }}">
-                                                                        {{ $post->title }}
-                                                                    </a>
-                                                                </h5>
-                                                            </div>
-
-                                                            <div class="card__post__author-info">
-                                                                <ul class="list-inline">
-                                                                    @if ($post->author)
-                                                                        <li class="list-inline-item">
-                                                                            <a href="#">
-                                                                                by {{ $post->author->name }}
-                                                                            </a>
-                                                                        </li>
-                                                                    @endif
-                                                                    @if ($post->published_at)
-                                                                        <li class="list-inline-item">
-                                                                            <span>
-                                                                                {{ $post->published_at->format('F d, Y') }}
-                                                                            </span>
-                                                                        </li>
-                                                                    @endif
-                                                                </ul>
-                                                            </div>
+    @php
+        $activeCategories = $categories->filter(function ($category) {
+            return $category->homepagePosts && $category->homepagePosts->isNotEmpty();
+        });
+    @endphp
+    <div class="popular__section-news">
+        <div class="container">
+            @foreach ($activeCategories->chunk(2) as $categoryRow)
+                <div class="row">
+                    @foreach ($categoryRow as $category)
+                        @php
+                            $posts = $category->homepagePosts ?? collect();
+                        @endphp
+                        <div class="col-md-12 col-lg-6 mb-5">
+                            <aside class="wrapper__list__article mb-0">
+                                {{-- CATEGORY TITLE --}}
+                                <h4 class="border_section">
+                                    {{ $category->name }}
+                                </h4>
+                                {{-- FIRST 2 FEATURED POSTS --}}
+                                <div class="row">
+                                    @foreach ($posts->take(2) as $post)
+                                        <div class="col-sm-12 col-md-6 mb-4">
+                                            <div class="card__post">
+                                                <div class="card__post__body card__post__transition">
+                                                    <a href="{{ $postUrl($post) }}">
+                                                        <img src="{{ $imageUrl($post) }}" class="img-fluid"
+                                                            alt="{{ $post->title }}" loading="lazy">
+                                                    </a>
+                                                    <div class="card__post__content bg__post-cover">
+                                                        {{-- CATEGORY --}}
+                                                        <div class="card__post__category">
+                                                            {{ $category->name }}
+                                                        </div>
+                                                        {{-- TITLE --}}
+                                                        <div class="card__post__title">
+                                                            <h5>
+                                                                <a href="{{ $postUrl($post) }}">
+                                                                    {{ $post->title }}
+                                                                </a>
+                                                            </h5>
+                                                        </div>
+                                                        {{-- AUTHOR + DATE --}}
+                                                        <div class="card__post__author-info">
+                                                            <ul class="list-inline">
+                                                                @if ($post->author)
+                                                                    <li class="list-inline-item">
+                                                                        <a href="#">
+                                                                            by {{ $post->author->name }}
+                                                                        </a>
+                                                                    </li>
+                                                                @endif
+                                                                @if ($post->published_at)
+                                                                    <li class="list-inline-item">
+                                                                        <span>
+                                                                            {{ $post->published_at->format('F d, Y') }}
+                                                                        </span>
+                                                                    </li>
+                                                                @endif
+                                                            </ul>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        @endforeach
-                                    </div>
+                                        </div>
+                                    @endforeach
+                                </div>
 
+                                {{-- SMALL POSTS --}}
+                                @if ($posts->skip(2)->isNotEmpty())
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="wrapp__list__article-responsive">
+                                                @foreach ($posts->skip(2)->take(2) as $post)
+                                                    <div class="mb-3">
+                                                        <div class="card__post card__post-list">
+                                                            {{-- IMAGE --}}
+                                                            <div class="image-sm">
+                                                                <a href="{{ $postUrl($post) }}">
+                                                                    <img src="{{ $imageUrl($post) }}" class="img-fluid"
+                                                                        alt="{{ $post->title }}" loading="lazy">
+                                                                </a>
+                                                            </div>
+                                                            {{-- CONTENT --}}
+                                                            <div class="card__post__body">
+                                                                <div class="card__post__content">
+                                                                    {{-- AUTHOR + DATE --}}
+                                                                    <div class="card__post__author-info mb-2">
+                                                                        <ul class="list-inline">
+                                                                            @if ($post->author)
+                                                                                <li class="list-inline-item">
+                                                                                    <span class="text-primary">
+                                                                                        by {{ $post->author->name }}
+                                                                                    </span>
+                                                                                </li>
+                                                                            @endif
 
-                                    @if ($posts->skip(2)->isNotEmpty())
-                                        <div class="row">
-                                            <div class="col-sm-12 col-md-6">
-                                                <div class="wrapp__list__article-responsive">
-                                                    @foreach ($posts->skip(2)->take(2) as $post)
-                                                        <div class="mb-3">
-                                                            <div class="card__post card__post-list">
-                                                                <div class="image-sm">
-                                                                    <a href="{{ $postUrl($post) }}">
-                                                                        <img src="{{ $imageUrl($post) }}"
-                                                                            class="img-fluid" alt="{{ $post->title }}"
-                                                                            loading="lazy">
-                                                                    </a>
-                                                                </div>
-
-                                                                <div class="card__post__body">
-                                                                    <div class="card__post__content">
-                                                                        <div class="card__post__author-info mb-2">
-                                                                            <ul class="list-inline">
-                                                                                @if ($post->author)
-                                                                                    <li class="list-inline-item">
-                                                                                        <span class="text-primary">
-                                                                                            by {{ $post->author->name }}
-                                                                                        </span>
-                                                                                    </li>
-                                                                                @endif
-
-                                                                                @if ($post->published_at)
-                                                                                    <li class="list-inline-item">
-                                                                                        <span
-                                                                                            class="text-dark text-capitalize">
-                                                                                            {{ $post->published_at->format('F d, Y') }}
-                                                                                        </span>
-                                                                                    </li>
-                                                                                @endif
-                                                                            </ul>
-                                                                        </div>
-
-                                                                        <div class="card__post__title">
-                                                                            <h6>
-                                                                                <a href="{{ $postUrl($post) }}">
-                                                                                    {{ $post->title }}
-                                                                                </a>
-                                                                            </h6>
-                                                                        </div>
+                                                                            @if ($post->published_at)
+                                                                                <li class="list-inline-item">
+                                                                                    <span
+                                                                                        class="text-dark text-capitalize">
+                                                                                        {{ $post->published_at->format('F d, Y') }}
+                                                                                    </span>
+                                                                                </li>
+                                                                            @endif
+                                                                        </ul>
+                                                                    </div>
+                                                                    {{-- TITLE --}}
+                                                                    <div class="card__post__title">
+                                                                        <h6>
+                                                                            <a href="{{ $postUrl($post) }}">
+                                                                                {{ $post->title }}
+                                                                            </a>
+                                                                        </h6>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    @endforeach
-                                                </div>
+                                                    </div>
+                                                @endforeach
                                             </div>
                                         </div>
-                                    @endif
-                                </aside>
-                            </div>
-
-                            <div class="col-md-12 col-lg-4">
-                                <aside class="wrapper__list__article">
-                                    <h4 class="border_section">
-                                        Popular Post
-                                    </h4>
-                                    <div class="wrapper__list-number">
-                                        @foreach ($popularPosts->take(4) as $index => $popular)
-                                            <div class="card__post__list">
-                                                <div class="list-number">
-                                                    <span>
-                                                        {{ $index + 1 }}
-                                                    </span>
-                                                </div>
-                                                @if ($popular->category)
-                                                    <a href="{{ $categoryUrl($popular->category) }}" class="category">
-                                                        {{ $popular->category->name }}
-                                                    </a>
-                                                @endif
-                                                <ul class="list-inline">
-                                                    <li class="list-inline-item">
-                                                        <h5>
-                                                            <a href="{{ $postUrl($popular) }}">
-                                                                {{ $popular->title }}
-                                                            </a>
-                                                        </h5>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        @endforeach
                                     </div>
-                                </aside>
-                            </div>
+                                @endif
+                            </aside>
                         </div>
-                    </div>
+                    @endforeach
                 </div>
-            </section>
-        @endif
-    @endforeach
-
+            @endforeach
+        </div>
+    </div>
     {{-- END DYNAMIC CATEGORY SECTIONS --}}
 
     <section class="pt-0">
@@ -497,6 +467,11 @@
                                                                 {{ $post->title }}
                                                             </a>
                                                         </h6>
+                                                        @if ($post->excerpt)
+                                                            <p class="post-excerpt">
+                                                                {{ \Illuminate\Support\Str::limit(strip_tags($post->excerpt), 150) }}
+                                                            </p>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
@@ -640,28 +615,18 @@
                             </aside>
                         @endif
 
-
-                        {{-- ====================================================
-                            ADVERTISE
-                        ==================================================== --}}
-                        <aside class="wrapper__list__article">
+                        <div class="wrapper__list__article">
 
                             <h4 class="border_section">
                                 Advertise
                             </h4>
-
                             <a href="#">
-
                                 <figure>
-
                                     <img src="{{ asset('assets/frontend/images/banner2.jpg') }}" alt="Advertisement"
                                         class="img-fluid" loading="lazy">
-
                                 </figure>
-
                             </a>
-
-                        </aside>
+                        </div>
                     </div>
                 </div>
             </div>

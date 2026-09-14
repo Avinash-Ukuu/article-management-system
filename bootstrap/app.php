@@ -11,7 +11,7 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
         then: function () {
-            Route::middleware(['web','auth'])->prefix('cms')->name('cms.')
+            Route::middleware(['web','auth'])->prefix('cms/admin')->name('cms.')
                 ->group(base_path('routes/cms.php'));
         },
     )

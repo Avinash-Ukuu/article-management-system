@@ -47,6 +47,6 @@ Route::post('/categories/update-position',  [CategoryController::class, 'updateP
 Route::resource('tags',                     TagController::class);
 
 // Content
-Route::resource('content',                  ContentController::class);
+Route::resource('content',                  ContentController::class)->except(['show']);
 Route::patch('content/{content}/toggle-status',    [ContentController::class, 'toggleStatus'])->name('content.toggle-status');
 Route::patch('content/{content}/toggle-featured',  [ContentController::class, 'toggleFeatured'])->name('content.toggle-featured');

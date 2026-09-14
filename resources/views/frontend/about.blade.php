@@ -64,7 +64,7 @@
                 </p>
                 <div class="mt-4 mb-3">
                     <a
-                        href="{{ route('categories') }}"
+                        href="{{ route('category-list') }}"
                         class="btn btn-primary"
                     >
                         Explore Categories

@@ -4,132 +4,28 @@
          <footer>
              <div class="wrapper__footer bg__footer-dark pb-0">
                  <div class="container">
+                                 @php
+                                        $categories = \App\Models\Category::query()->activeOrdered()->orderBy('position')->orderBy('id')
+                                                        ->get([
+                                                            'id',
+                                                            'name',
+                                                            'slug',
+                                                            'position',
+                                                        ]);
+                                 @endphp
                      <div class="row">
-                         <div class="col-md-3">
-                             <div class="widget__footer">
-                                 <div class="dropdown-footer ">
-                                     <h4 class="footer-title">
-                                         world
-                                         <span class="fa fa-angle-down"></span>
-                                     </h4>
+                        @foreach($categories as $category)
+                            <div class="col-md-3">
+                                <div class="widget__footer">
+                                    <ul class="list-unstyled option-content ">
+                                        <li>
+                                            <a href="{{ route('category.show', $category->slug) }}">{{$category->name}}</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        @endforeach
 
-                                 </div>
-
-                                 <ul class="list-unstyled option-content is-hidden">
-                                     <li>
-                                         <a href="#">global economy</a>
-
-                                     </li>
-                                     <li>
-                                         <a href="#">religion</a>
-                                     </li>
-                                     <li>
-                                         <a href="#">bitcoin</a>
-                                     </li>
-                                     <li>
-                                         <a href="#">conflict</a>
-                                     </li>
-                                     <li>
-                                         <a href="#">sports</a>
-                                     </li>
-                                     <li>
-                                         <a href="#">scandals</a>
-                                     </li>
-
-                                 </ul>
-                             </div>
-                         </div>
-                         <div class="col-md-3">
-                             <div class="widget__footer">
-                                 <div class="dropdown-footer">
-                                     <h4 class="footer-title">
-                                         entertainment
-                                         <span class="fa fa-angle-down"></span>
-                                     </h4>
-
-                                 </div>
-
-                                 <ul class="list-unstyled option-content is-hidden">
-                                     <li>
-                                         <a href="#">celebity news</a>
-                                     </li>
-                                     <li>
-                                         <a href="#">movies</a>
-                                     </li>
-                                     <li>
-                                         <a href="#">tv news</a>
-                                     </li>
-                                     <li>
-                                         <a href="#">music news</a>
-                                     </li>
-                                     <li>
-                                         <a href="#">life style</a>
-                                     </li>
-                                     <li>
-                                         <a href="#">entertainment video</a>
-                                     </li>
-                                 </ul>
-                             </div>
-                         </div>
-                         <div class="col-md-3">
-                             <div class="widget__footer">
-                                 <div class="dropdown-footer">
-                                     <h4 class="footer-title">
-                                         health
-                                         <span class="fa fa-angle-down"></span>
-                                     </h4>
-
-                                 </div>
-                                 <ul class="list-unstyled option-content is-hidden">
-                                     <li>
-                                         <a href="#">medical research</a>
-                                     </li>
-                                     <li>
-                                         <a href="#">healthy living</a>
-                                     </li>
-                                     <li>
-                                         <a href="#">mental health</a>
-                                     </li>
-                                     <li>
-                                         <a href="#">virus corona</a>
-                                     </li>
-                                     <li>
-                                         <a href="#">children's health</a>
-                                     </li>
-
-                                 </ul>
-                             </div>
-                         </div>
-                         <div class="col-md-3">
-                             <div class="widget__footer">
-                                 <div class="dropdown-footer">
-                                     <h4 class="footer-title">
-                                         business
-                                         <span class="fa fa-angle-down"></span>
-                                     </h4>
-
-                                 </div>
-
-                                 <ul class="list-unstyled option-content is-hidden">
-                                     <li>
-                                         <a href="#">merkets</a>
-                                     </li>
-                                     <li>
-                                         <a href="#">technology</a>
-                                     </li>
-                                     <li>
-                                         <a href="#">features</a>
-                                     </li>
-                                     <li>
-                                         <a href="#">property</a>
-                                     </li>
-                                     <li>
-                                         <a href="#">business leaders</a>
-                                     </li>
-
-                                 </ul>
-                             </div>
-                         </div>
                      </div>
                  </div>
                  <div class="mt-4">
@@ -188,44 +84,29 @@
                              <div class="border-top-1 bg__footer-bottom-section">
                                  <ul class="list-inline link-column">
                                      <li class="list-inline-item">
-                                         <a href="/contact-us.html">
-                                             contact us
+                                         <a href="{{ route('category-list') }}">
+                                             categories
                                          </a>
                                      </li>
                                      <li class="list-inline-item">
-                                         <a href="#"> terms of use</a>
-                                     </li>
-                                     <li class="list-inline-item">
-                                         <a href="#">
-                                             adchoice
-                                         </a>
-                                     </li>
-                                     <li class="list-inline-item">
-                                         <a href="/about-us">
+                                         <a href="{{ route('about') }}">
                                              about us
                                          </a>
                                      </li>
+
                                      <li class="list-inline-item">
-                                         <a href="#">
-                                             newsletters
-                                         </a>
-                                     </li>
-                                     <li class="list-inline-item">
-                                         <a href="#">
+                                         <a href="{{ route('sitemap') }}">
                                              sitemap
                                          </a>
                                      </li>
-                                     <li class="list-inline-item">
-                                         <a href="#">
-                                             magrenvi store
-                                         </a>
-                                     </li>
+
                                  </ul>
                                  <ul class="list-inline">
                                      <li class="list-inline-item">
                                          <span>
-                                             Copyright © 2019 News and Magazine template based on Bootstrap 4 Theme
-                                             by <a href="#">retenvi</a>
+                                             © 2026 <a href="http://www.nastservices.com/" target="_blank" title="Premium news">NAST
+                                                 Services</a>
+                                             .
                                          </span>
                                      </li>
                                  </ul>
