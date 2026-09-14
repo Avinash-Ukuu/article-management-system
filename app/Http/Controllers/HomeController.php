@@ -14,68 +14,63 @@ class HomeController extends Controller
     public function home()
     {
         $postSelect     = [
-                            'id',
-                            'category_id',
-                            'title',
-                            'slug',
-                            'excerpt',
-                            'featured_image',
-                            'author_id',
-                            'published_at',
-                            'views_count',
-                        ];
+            'id',
+            'category_id',
+            'title',
+            'slug',
+            'excerpt',
+            'featured_image',
+            'author_id',
+            'published_at',
+            'views_count',
+        ];
 
         $trendingPosts  = Content::query()->published()->where('content_type', '!=', 'quote')
-                            ->select($postSelect)->with([
-                                'author:id,name',
-                                'category:id,name,slug',
-                            ])
-                            ->latest('published_at')
-                            ->latest('id')
-                            ->limit(5)
-                            ->get();
+            ->select($postSelect)->with([
+                'author:id,name',
+                'category:id,name,slug',
+            ])
+            ->latest('published_at')
+            ->latest('id')
+            ->limit(5)
+            ->get();
 
 
         $bannerPostIds  = $trendingPosts->pluck('id');
 
         $popularPosts   = Content::query()->published()
-                            ->where('content_type', '!=', 'quote')
-                            ->where('is_featured', true)
-                            ->when(
-                                $bannerPostIds->isNotEmpty(),
-                                function ($query) use ($bannerPostIds) {
-                                    $query->whereNotIn('id', $bannerPostIds);
-                                }
-                            )
-                            ->select($postSelect)
-                            ->with([
-                                'author:id,name',
-                                'category:id,name,slug',
-                            ])
-                            ->orderByDesc('views_count')
-                            ->latest('published_at')
-                            ->latest('id')
-                            ->limit(15)
-                            ->get();
+            ->where('content_type', '!=', 'quote')
+            ->where('is_featured', true)
+            ->when(
+                $bannerPostIds->isNotEmpty(),
+                function ($query) use ($bannerPostIds) {
+                    $query->whereNotIn('id', $bannerPostIds);
+                }
+            )
+            ->select($postSelect)
+            ->with([
+                'author:id,name',
+                'category:id,name,slug',
+            ])
+            ->orderByDesc('views_count')
+            ->latest('published_at')
+            ->latest('id')
+            ->limit(15)
+            ->get();
 
         $excludedPostIds = $bannerPostIds
-                            ->merge($popularPosts->pluck('id'))
-                            ->unique()
-                            ->values();
+            ->merge($popularPosts->pluck('id'))
+            ->unique()
+            ->values();
 
         $categories     = Category::query()->activeOrdered()
-                            ->where('slug', '!=', 'quote')
-                            ->whereHas('contents', function ($query) {
-                                $query
-                                    ->published()
-                                    ->where('content_type', '!=', 'quote');
-                            })
-                            ->get([
-                                'id',
-                                'name',
-                                'slug',
-                                'position',
-                            ]);
+            ->where('slug', '!=', 'quote')
+            ->get([
+                'id',
+                'name',
+                'slug',
+                'position',
+            ]);
 
 
         $categoryIds = $categories->pluck('id');
@@ -87,18 +82,22 @@ class HomeController extends Controller
                 ->published()
                 ->whereIn('category_id', $categoryIds)
                 ->where('content_type', '!=', 'quote')
-                ->when(
-                    $excludedPostIds->isNotEmpty(),
-                    function ($query) use ($excludedPostIds) {
-                        $query->whereNotIn('id', $excludedPostIds);
-                    }
-                )
-                ->select($postSelect)
+                ->select([
+                    'id',
+                    'category_id',
+                    'title',
+                    'slug',
+                    'excerpt',
+                    'featured_image',
+                    'author_id',
+                    'published_at',
+                    'views_count',
+                ])
                 ->with([
                     'author:id,name',
+                    'category:id,name,slug',
                 ])
                 ->latest('published_at')
-                ->latest('id')
                 ->get()
                 ->groupBy('category_id');
         }
