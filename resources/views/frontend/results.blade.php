@@ -1,7 +1,11 @@
 @extends('frontend.layouts.master')
 @php
-    $meta_title = $category->meta_title ?: "";
-    $meta_description = $category->meta_description ?: "";
+    if(!empty($category))
+    {
+        $meta_title = $category->meta_title ?: "";
+        $meta_description = $category->meta_description ?: "";
+        $meta_keywords = "";
+    }
 @endphp
 
 @section('content')

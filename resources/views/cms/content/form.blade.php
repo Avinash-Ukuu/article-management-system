@@ -424,7 +424,7 @@
                 // Check image dimensions
                 let img = new Image();
                 img.onload = function() {
-                    if (img.width > 304 || img.height > 304) {
+                    if (img.width > 1254 || img.height > 1254) {
                         // Must crop
                         let reader = new FileReader();
                         reader.onload = function(event) {
@@ -468,8 +468,8 @@
             // Crop & save
             $("#cropImageBtn").on("click", function() {
                 let canvas = cropper.getCroppedCanvas({
-                    width: 304,
-                    height: 304
+                    width: 1254,
+                    height: 1254
                 });
 
                 canvas.toBlob(function(blob) {

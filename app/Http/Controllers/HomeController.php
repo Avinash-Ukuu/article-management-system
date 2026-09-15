@@ -310,6 +310,7 @@ class HomeController extends Controller
                 ? 'Search Results for "' . $search . '"'
                 : 'Search Results',
             'type' => 'search',
+            'category' => null,
             'search' => $search,
         ]);
     }
@@ -377,6 +378,7 @@ class HomeController extends Controller
             'posts' => $posts,
             'title' => $tag->name,
             'type' => 'tag',
+            'category' => null,
             'tag' => $tag,
             'search' => null,
         ]);

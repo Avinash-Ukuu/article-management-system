@@ -115,7 +115,7 @@
                             <div class="wrap__article-detail-image mt-4">
                                 <figure>
                                     <img src="{{ asset('uploads/contents/' . $content->featured_image) }}"
-                                        alt="{{ $content->title }}" class="img-fluid" loading="eager">
+                                        alt="{{ $content->title }}" class="img-fluid customImage" loading="eager">
                                 </figure>
                             </div>
                         @endif
