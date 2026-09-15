@@ -36,17 +36,17 @@ class HomeController extends Controller
             ->get();
 
 
-        $bannerPostIds  = $trendingPosts->pluck('id');
+        // $bannerPostIds  = $trendingPosts->pluck('id');
 
         $popularPosts   = Content::query()->published()
             ->where('content_type', '!=', 'quote')
             ->where('is_featured', true)
-            ->when(
-                $bannerPostIds->isNotEmpty(),
-                function ($query) use ($bannerPostIds) {
-                    $query->whereNotIn('id', $bannerPostIds);
-                }
-            )
+            // ->when(
+            //     $bannerPostIds->isNotEmpty(),
+            //     function ($query) use ($bannerPostIds) {
+            //         $query->whereNotIn('id', $bannerPostIds);
+            //     }
+            // )
             ->select($postSelect)
             ->with([
                 'author:id,name',
@@ -57,11 +57,6 @@ class HomeController extends Controller
             ->latest('id')
             ->limit(15)
             ->get();
-
-        $excludedPostIds = $bannerPostIds
-            ->merge($popularPosts->pluck('id'))
-            ->unique()
-            ->values();
 
         $categories     = Category::query()->activeOrdered()
             ->where('slug', '!=', 'quote')
