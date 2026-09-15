@@ -2,7 +2,8 @@
 <html lang="">
 
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- SITE TITLE -->
     <title>{{ $meta_title ?? 'NAST Thoughts – Latest News, Insights, Tips & Ideas' }}</title>
 
