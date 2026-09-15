@@ -40,6 +40,14 @@ class CategoryRequest extends FormRequest
                     ->ignore($this->route('category')),
             ],
 
+            'meta_title' => [
+                'nullable',
+                'string',
+            ],
+            'meta_description' => [
+                'nullable',
+                'string',
+            ],
             'description' => [
                 'nullable',
                 'string',

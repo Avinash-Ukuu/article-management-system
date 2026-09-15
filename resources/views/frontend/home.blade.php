@@ -1,4 +1,29 @@
 @extends('frontend.layouts.master')
+@section('schema')
+    @php
+        $schema = [
+            '@context' => 'https://schema.org',
+            '@type' => 'WebSite',
+            'name' => 'NAST Thoughts',
+            'url' => url('/'),
+            'description' => 'Explore NAST Thoughts for the latest news, insightful articles, practical tips, inspiring stories, and useful ideas across technology, education, business, career, lifestyle, health, and more.',
+            'publisher' => [
+                '@type' => 'Organization',
+                'name' => 'NAST Thoughts',
+                'url' => url('/'),
+                'logo' => [
+                    '@type' => 'ImageObject',
+                    'url' => asset('assets/frontend/images/logo.png'),
+                ],
+            ],
+        ];
+    @endphp
+
+    <script type="application/ld+json">
+        {!! json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+    </script>
+
+@endsection
 @section('content')
     @php
         $defaultImage = asset('assets/frontend/images/newsimage8.png');

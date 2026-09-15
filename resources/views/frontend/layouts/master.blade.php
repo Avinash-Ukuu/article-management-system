@@ -2,18 +2,46 @@
 <html lang="">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="hosting-provider" content="Netlify">
-    <meta name="netlify-deploy"
-        content="https://netlify.new/?utm_campaign=ai-legible&amp;utm_source=meta&amp;utm_medium=referral&amp;utm_id=65552bbf-c459-4c4a-b1e0-d43e92a7035a">
-    <title> @yield('title', 'Best Blog - Article') </title>
-     @stack('meta')
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <!-- SITE TITLE -->
+    <title>{{ $meta_title ?? 'NAST Thoughts – Latest News, Insights, Tips & Ideas' }}</title>
 
-    {{-- <link rel="manifest" href="site.webmanifest"> --}}
+    <!-- META DESCRIPTION -->
+    <meta name="description"
+        content="{{ $meta_description ?? 'Explore NAST Thoughts for the latest news, insightful articles, practical tips, inspiring stories, and useful ideas across technology, education, business, career, lifestyle, health, and more.' }}">
+
+    <!-- META KEYWORDS -->
+    <meta name="keywords"
+        content="{{ $meta_keywords ?? 'NAST Thoughts, latest news, insightful articles, practical tips, inspiring stories, useful ideas, technology news, education insights, business tips, career advice, lifestyle tips, health information, latest articles, informative blogs, trending topics, expert insights, useful information, news and insights, technology articles, education articles, business articles, career tips, lifestyle articles' }}">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="{{ $meta_title ?? 'NAST Thoughts – Latest News, Insights, Tips & Ideas' }}">
+    <meta property="og:description"
+        content="{{ $meta_description ?? 'Explore NAST Thoughts for the latest news, insightful articles, practical tips, inspiring stories, and useful ideas across technology, education, business, career, lifestyle, health, and more.' }}">
+    <meta property="og:image" content="{{ $meta_image ?? url('assets/frontend/images/logo.png') }}">
+    <meta property="og:site_name" content="NAST Thoughts">
+    <meta name="robots"
+        content="{{ $meta_robots ?? 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' }}">
+
+    <meta name="author"
+        content="{{ $meta_author ?? 'NAST Thoughts' }}">
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="{{ $meta_url ?? url()->current() }}">
+    <meta name="twitter:title" content="{{ $meta_title ?? 'NAST Thoughts – Latest News, Insights, Tips & Ideas' }}">
+    <meta name="twitter:description"
+        content="{{ $meta_description ?? 'Explore NAST Thoughts for the latest news, insightful articles, practical tips, inspiring stories, and useful ideas across technology, education, business, career, lifestyle, health, and more.' }}">
+    <meta name="twitter:image" content="{{ $meta_image ?? url('assets/frontend/images/logo.png') }}">
     <!-- favicon.ico in the root directory -->
-    <link rel="apple-touch-icon" href="{{ asset('assets/frontend/images/icon.png') }}">
+    @yield('schema')
+    <link rel="canonical" href="{{ url()->current() }}">
+    <link rel="icon" type="image/png" href="{{ asset('assets/frontend/favicon/favicon-96x96.png') }}" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="{{ asset('assets/frontend/favicon/favicon.svg') }}" />
+    <link rel="shortcut icon" href="{{ asset('assets/frontend/favicon/favicon.ico') }}" />
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/frontend/favicon/apple-touch-icon.png') }}" />
+    <link rel="manifest" href="{{ asset('assets/frontend/favicon/site.webmanifest') }}" />
 
     <meta name="theme-color" content="#030303">
     <!-- google fonts -->
@@ -127,7 +155,8 @@
                     </div>
                     <figure class="mb-0 mx-auto">
                         <a href="{{ route('home') }}">
-                            <img style="height: auto; width: 200px;" src="{{ asset('assets/frontend/images/logo.png') }}" alt=""
+                            <img style="height: auto; width: 200px;"
+                                src="{{ asset('assets/frontend/images/logo.png') }}" alt=""
                                 class="img-fluid logo">
                         </a>
                     </figure>
@@ -141,7 +170,8 @@
                                 <a class="nav-link" href="{{ route('about') }}">
                                     About </a>
                             </li>
-                            <li class="nav-item"><a class="nav-link" href="{{ route('category-list') }}"> Category </a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('category-list') }}"> Category
+                                </a></li>
                             {{-- <li class="nav-item"><a class="nav-link" href="#"> contact </a></li> --}}
                         </ul>
 
@@ -162,14 +192,15 @@
                                         <div class="row no-gutters mt-3">
                                             <div class="col">
                                                 <input class="form-control border-secondary border-right-0 rounded-0"
-                                                    type="search" value="{{ request('q') }}" name="q" placeholder="Search "
-                                                    id="example-search-input4">
+                                                    type="search" value="{{ request('q') }}" name="q"
+                                                    placeholder="Search " id="example-search-input4">
                                             </div>
                                             <div class="col-auto">
-                                                <button class="btn btn-outline-secondary border-left-0 rounded-0 rounded-right"
+                                                <button
+                                                    class="btn btn-outline-secondary border-left-0 rounded-0 rounded-right"
                                                     type="submit">
                                                     <i class="fa fa-search"></i>
-                                            </button>
+                                                </button>
                                             </div>
                                         </div>
 
@@ -194,10 +225,12 @@
                                 <div class="row no-gutters">
                                     <div class="col">
                                         <input class="form-control border-secondary border-right-0 rounded-0"
-                                            type="search" value="{{ request('q') }}" name="q" placeholder="Search">
+                                            type="search" value="{{ request('q') }}" name="q"
+                                            placeholder="Search">
                                     </div>
                                     <div class="col-auto">
-                                        <button class="btn btn-outline-secondary border-left-0 rounded-0 rounded-right"  type="submit">
+                                        <button class="btn btn-outline-secondary border-left-0 rounded-0 rounded-right"
+                                            type="submit">
                                             <i class="fa fa-search"></i>
                                         </button>
                                     </div>
@@ -212,7 +245,7 @@
                         <nav class="list-group list-group-flush">
                             <ul class="navbar-nav ">
                                 <li class="nav-item dropdown">
-                                    <a class="nav-link text-dark" href="{{route('home')}}"> Home
+                                    <a class="nav-link text-dark" href="{{ route('home') }}"> Home
                                     </a>
                                 </li>
 
@@ -223,7 +256,8 @@
                                 </li>
 
 
-                                <li class="nav-item"><a class="nav-link  text-dark" href="{{ route('category-list') }}"> Category </a>
+                                <li class="nav-item"><a class="nav-link  text-dark"
+                                        href="{{ route('category-list') }}"> Category </a>
                                 </li>
                                 {{-- <li class="nav-item"><a class="nav-link  text-dark" href="#"> contact </a>
                                 </li> --}}
@@ -232,9 +266,9 @@
                         </nav>
                     </div>
                     <div class="modal-footer">
-                        <p>© 2026 <a href="http://www.nastservices.com/" target="_blank"
-                                title="Premium news">NAST Services</a>
-                           .</p>
+                        <p>© 2026 <a href="http://www.nastservices.com/" target="_blank" title="Premium news">NAST
+                                Services</a>
+                            .</p>
                     </div>
                 </div>
             </div> <!-- modal-bialog .// -->
@@ -245,7 +279,7 @@
     <!-- End Header news -->
     @yield('content')
 
-   @include('frontend.layouts.footer')
+    @include('frontend.layouts.footer')
 
 
     <a href="javascript:" id="return-to-top"><i class="fa fa-chevron-up"></i></a>

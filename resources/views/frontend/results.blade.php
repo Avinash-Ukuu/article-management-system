@@ -1,4 +1,9 @@
 @extends('frontend.layouts.master')
+@php
+    $meta_title = $category->meta_title ?: "";
+    $meta_description = $category->meta_description ?: "";
+@endphp
+
 @section('content')
     @php
         $defaultImage = asset('assets/frontend/images/newsimage8.png');

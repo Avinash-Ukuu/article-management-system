@@ -85,6 +85,30 @@
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
+                        <div class="form-group">
+                            {!! Form::label('meta_title', 'Meta Title') !!}
+
+                            {!! Form::text('meta_title', null, [
+                                'class' => 'form-control',
+                                'placeholder' => 'category-meta-title',
+                            ]) !!}
+
+                            @error('meta_title')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            {!! Form::label('meta_description', 'Meta Description') !!}
+
+                            {!! Form::text('meta_description', null, [
+                                'class' => 'form-control',
+                                'placeholder' => 'category-meta-description',
+                            ]) !!}
+
+                            @error('meta_description')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
 
                         {{-- Description --}}
                         <div class="form-group">

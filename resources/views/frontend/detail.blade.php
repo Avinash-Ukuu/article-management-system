@@ -1,28 +1,32 @@
 @extends('frontend.layouts.master')
+@php
+    $meta_title = $content->seoMetadata?->meta_title ?: $content->title;
+    $meta_description = $content->seoMetadata?->meta_description ?: $content->excerpt;
+    $meta_keywords = $content->seoMetadata?->meta_keywords ?: "";
+    $meta_image = $content->featured_image ? url('uploads/contents/' . $content->featured_image) : "";
+@endphp
+@section('schema')
+    @php
+        $schema = [
+            '@context' => 'https://schema.org',
+            '@type' => 'BlogPosting',
+            'name' => 'Category List - NAST Thoughts',
+            'description' => 'Explore the latest category news, articles, insights, tips and ideas on NAST Thoughts.',
+            'url' => url()->current(),
 
-@section('title', $content->seoMetadata?->meta_title ?: $content->title)
-@push('meta')
-    <meta name="description" content="{{ $content->seoMetadata?->meta_description ?: $content->excerpt }}">
-    @if ($content->seoMetadata?->meta_keywords)
-        <meta name="keywords" content="{{ $content->seoMetadata->meta_keywords }}">
-    @endif
-    <meta name="robots" content="{{ $content->seoMetadata?->robots ?: 'index, follow' }}">
-    <link rel="canonical" href="{{ route('content.show', [ 'category' => $content->category->slug,'slug' => $content->slug,]) }}">
-    <meta property="og:type" content="article">
-    <meta property="og:title" content="{{ $content->seoMetadata?->meta_title ?: $content->title }}">
-    <meta property="og:description" content="{{ $content->seoMetadata?->meta_description ?: $content->excerpt }}">
-    <meta property="og:url" content="{{ route('content.show', [ 'category' => $content->category->slug,'slug' => $content->slug,]) }}">
-    @if ($content->featured_image)
-        <meta property="og:image" content="{{ asset('uploads/contents/' . $content->featured_image) }}">
-    @endif
-    {{-- Twitter --}}
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{{ $content->seoMetadata?->meta_title ?: $content->title }}">
-    <meta name="twitter:description" content="{{ $content->seoMetadata?->meta_description ?: $content->excerpt }}">
+            'isPartOf' => [
+                '@type' => 'WebPage',
+                'name' => 'NAST Thoughts',
+                'url' => url('/'),
+            ],
+        ];
+    @endphp
 
-@endpush
+    <script type="application/ld+json">
+        {!! json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+    </script>
 
-
+@endsection
 @section('content')
     <section class="pb-80">
         <div class="container">

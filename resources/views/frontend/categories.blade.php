@@ -1,7 +1,37 @@
 @extends('frontend.layouts.master')
+@php
+    $meta_title = "All Categories – Explore Articles, Stories & Insights | NAST Thoughts";
+    $meta_description = "Explore all NAST Thoughts categories and discover articles, stories, insights, tips and ideas across education, career, technology, business, lifestyle, health, travel, and more.";
+    $meta_keywords = "";
+@endphp
+@section('schema')
+    @php
+        $schema = [
+            '@context' => 'https://schema.org',
+            '@type' => 'CollectionPage',
+            'headline' => $meta_title,
+            'description' => $meta_description,
+            'url' => url()->current(),
 
+            'mainEntityOfPage' => [
+                '@type' => 'WebPage',
+                '@id' => url()->current(),
+            ],
+
+            'publisher' => [
+                '@type' => 'Organization',
+                'name' => 'NAST Thoughts',
+                'url' => route('home'),
+            ],
+        ];
+    @endphp
+
+    <script type="application/ld+json">
+        {!! json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+    </script>
+
+@endsection
 @section('content')
-
 <div class="container mt-3">
     <div class="row">
         <div class="col-lg-12">
