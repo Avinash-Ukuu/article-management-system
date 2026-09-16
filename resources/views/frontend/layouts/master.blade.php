@@ -26,6 +26,15 @@
     <meta name="robots"
         content="{{ $meta_robots ?? 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' }}">
 
+        <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NCNT472W43"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-NCNT472W43');
+    </script>
     <meta name="author"
         content="{{ $meta_author ?? 'NAST Thoughts' }}">
     <!-- Twitter / X -->
